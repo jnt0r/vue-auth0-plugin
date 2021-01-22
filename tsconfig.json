@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "target": "ES6",
+    "moduleResolution": "Node" ,
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": true,
+  },
+  "include": [
+    "*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
