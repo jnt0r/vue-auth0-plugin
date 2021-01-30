@@ -1,14 +1,22 @@
 {
   "compilerOptions": {
-    "module": "ES6",
-    "target": "ES6",
+    "module": "CommonJS",
+    "target": "ESNext",
     "moduleResolution": "Node" ,
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
-    "noEmit": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "lib": [
+      "ES2020",
+      "DOM"
+    ]
   },
   "include": [
-    "*.d.ts"
+    "src/**/*.ts",
+    "tests/**/*.ts"
   ],
   "exclude": [
     "node_modules"
