@@ -4,6 +4,7 @@ import {
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
     LogoutOptions,
+    PopupConfigOptions,
     PopupLoginOptions,
     RedirectLoginOptions,
     User
@@ -13,11 +14,11 @@ export default interface AuthProperty {
     isAuthenticated: ComputedRef<boolean>;
     loading: ComputedRef<boolean>;
     user: ComputedRef<User>;
-    getIdTokenClaims: (options: GetIdTokenClaimsOptions) => void,
-    getTokenSilently: (options: GetTokenSilentlyOptions) => void,
-    getTokenWithPopup: (options: GetTokenWithPopupOptions) => void,
+    getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => void,
+    getTokenSilently: (options?: GetTokenSilentlyOptions) => void,
+    getTokenWithPopup: (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) => void,
     handleRedirectCallback: () => void,
-    loginWithRedirect: (options: RedirectLoginOptions) => void,
-    loginWithPopup: (options: PopupLoginOptions) => void,
-    logout: (options: LogoutOptions) => void,
+    loginWithRedirect: (options?: RedirectLoginOptions) => void,
+    loginWithPopup: (options?: PopupLoginOptions, config?: PopupConfigOptions) => void,
+    logout: (options?: LogoutOptions) => void,
 }

@@ -11,5 +11,3 @@ export default {
         createAuth0Client(options).then(value => Plugin.initialize(value, options.callbackRedirect));
     }
 }
-
-

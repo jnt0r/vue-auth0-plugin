@@ -3,7 +3,10 @@ import {
     Auth0Client,
     GetIdTokenClaimsOptions,
     GetTokenSilentlyOptions,
-    GetTokenWithPopupOptions, LogoutOptions,
+    GetTokenWithPopupOptions,
+    LogoutOptions,
+    PopupConfigOptions,
+    PopupLoginOptions,
     RedirectLoginOptions,
     User
 } from "@auth0/auth0-spa-js";
@@ -61,11 +64,11 @@ export default {
     initialize
 }
 
-async function loginWithPopup() {
+async function loginWithPopup(options?: PopupLoginOptions, config?: PopupConfigOptions) {
     state.popupOpen = true;
 
     try {
-        await client.loginWithPopup();
+        await client.loginWithPopup(options, config);
     } catch (e) {
         console.error(e);
     } finally {
@@ -90,22 +93,22 @@ async function handleRedirectCallback() {
     }
 }
 
-function loginWithRedirect(options: RedirectLoginOptions) {
+function loginWithRedirect(options?: RedirectLoginOptions) {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims(o: GetIdTokenClaimsOptions) {
-    return client.getIdTokenClaims(o);
+function getIdTokenClaims(options?: GetIdTokenClaimsOptions) {
+    return client.getIdTokenClaims(options);
 }
 
-function getTokenSilently(o: GetTokenSilentlyOptions) {
-    return client.getTokenSilently(o);
+function getTokenSilently(options?: GetTokenSilentlyOptions) {
+    return client.getTokenSilently(options);
 }
 
-function getTokenWithPopup(o: GetTokenWithPopupOptions) {
-    return client.getTokenWithPopup(o);
+function getTokenWithPopup(options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) {
+    return client.getTokenWithPopup(options, config);
 }
 
-function logout(o: LogoutOptions) {
-    return client.logout(o);
+function logout(options?: LogoutOptions) {
+    return client.logout(options);
 }
