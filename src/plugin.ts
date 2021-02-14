@@ -15,9 +15,15 @@ import AuthProperty from "./AuthProperty";
 const state = reactive({
     loading: true,
     isAuthenticated: false,
-    user: {} as User | undefined,
+    user: undefined,
     popupOpen: false,
-    error: null,
+    error: undefined,
+} as {
+    loading: boolean,
+    isAuthenticated: boolean,
+    user?: User,
+    popupOpen: boolean,
+    error?: string
 });
 
 const properties = {

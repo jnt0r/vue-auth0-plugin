@@ -11,3 +11,6 @@ export default {
         createAuth0Client(options).then(value => Plugin.initialize(value, options.callbackRedirect));
     }
 }
+
+import RouteGuard from './routeGuard';
+export { RouteGuard };

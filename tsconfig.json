@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
     "target": "ESNext",
-    "moduleResolution": "Node" ,
+    "moduleResolution": "Node",
     "sourceMap": false,
     "strict": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "outDir": "dist",
+//    "skipLibCheck": true,
     "declaration": true,
+    "declarationMap": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": [
       "ES2020",
       "DOM"
@@ -19,6 +22,6 @@
     "tests/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules/*"
   ]
 }
