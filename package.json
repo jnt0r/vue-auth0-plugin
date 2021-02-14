@@ -1,6 +1,6 @@
 {
   "name": "auth0-vue-plugin",
-  "version": "1.0.0-0",
+  "version": "1.0.0-1",
   "description": "",
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
