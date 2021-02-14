@@ -1,6 +1,6 @@
 {
   "name": "auth0-vue-plugin",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
@@ -11,16 +11,17 @@
     "test": "jest",
     "build": "npm run build:ts && npm run build:dts",
     "build:ts": "rollup -c rollup.config.js",
-    "build:dts": "copyfiles -f src/vue.d.ts dist && concat -o dist/index.d.ts dist/index.d.ts src/concat.d.ts"
+    "build:dts": "copyfiles -f src/vue.d.ts dist && concat -o dist/index.d.ts dist/index.d.ts src/concat.d.ts",
+    "release": "np --tag=beta"
   },
   "files": [
     "dist/**/*.js",
     "dist/*.d.ts",
     "types"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["auth0", "vue", "plugin"],
+  "author": "Jonathan Pollert",
+  "license": "MIT",
   "peerDependencies": {
     "@auth0/auth0-spa-js": "^1.13.6",
     "vue": "^3.0.5",
