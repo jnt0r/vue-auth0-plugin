@@ -51,7 +51,7 @@ describe('Auth0VuePlugin', () => {
         // @ts-ignore
         expect(wrapper.vm.$auth.loading.value).toBe(true);
         // @ts-ignore
-        expect(wrapper.vm.$auth.user.value).toEqual({});
+        expect(wrapper.vm.$auth.user.value).toEqual(undefined);
     });
 
 });
