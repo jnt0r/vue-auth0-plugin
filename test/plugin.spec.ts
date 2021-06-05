@@ -1,6 +1,7 @@
 import {deepEqual, instance, mock, verify, when} from "ts-mockito";
 import {Auth0Client, User} from "@auth0/auth0-spa-js";
 import Plugin from '../src/plugin';
+import {App, createApp} from "vue";
 
 /** Workaround for ts-mockito Bug **/
 export const resolvableInstance = <T extends {}>(mock: T) => new Proxy<T>(instance(mock), {
@@ -27,20 +28,21 @@ describe('initialize', () => {
     global.crypto["subtle"] = {} // this gets around the 'auth0-spa-js must run on a secure origin' error
 
     const client: Auth0Client = mock<Auth0Client>();
+    const app = createApp({render: () => null});
 
     test('should set state when not authenticated', (done) => {
         when(client.getUser()).thenResolve(undefined);
         when(client.isAuthenticated()).thenResolve(false);
 
-        return Plugin.initialize(instance(client), jest.fn()).then(() => {
-            expect(Plugin.state.isAuthenticated).toBeFalsy();
-            expect(Plugin.state.loading).toBeFalsy();
-            expect(Plugin.state.user).toBeUndefined();
+        return Plugin.initialize(app, instance(client)).then(() => {
+            expect(Plugin.properties.isAuthenticated).toBeFalsy();
+            expect(Plugin.properties.loading).toBeFalsy();
+            expect(Plugin.properties.user).toBeUndefined();
             done();
         });
     });
 
-    test('should set state according to auth0 response', async (done) => {
+    test('should set state when authenticated', async (done) => {
         const clientInstance = instance(client);
         const user: User = {
             name: 'mike',
@@ -49,20 +51,15 @@ describe('initialize', () => {
         when(client.getUser()).thenResolve(user);
         when(client.isAuthenticated()).thenResolve(true);
 
-        let actual = await clientInstance.getUser();
-        expect(actual).not.toBeNull();
-        expect(actual).not.toBeUndefined();
-        expect(client.isAuthenticated()).toBeTruthy();
-
-        return Plugin.initialize(clientInstance, jest.fn()).then(() => {
-            expect(Plugin.state.isAuthenticated).toBeTruthy();
-            expect(Plugin.state.loading).toBeFalsy();
-            expect(Plugin.state.user).toEqual(user);
+        return Plugin.initialize(app, clientInstance).then(() => {
+            expect(Plugin.properties.isAuthenticated).toBeTruthy();
+            expect(Plugin.properties.loading).toBeFalsy();
+            expect(Plugin.properties.user).toEqual(user);
             done();
         });
     });
 
-    test('should set state according to auth0 response', async (done) => {
+    test('should handle redirect and navigate using router', async (done) => {
         const clientInstance = instance(client);
         const appState = {};
 
@@ -76,11 +73,15 @@ describe('initialize', () => {
             }
         });
 
-        let callback = jest.fn();
-        return Plugin.initialize(clientInstance, callback).then(() => {
+        // mock vue-router
+        let router_push = jest.fn();
+        app.config.globalProperties.$router = {};
+        app.config.globalProperties.$router.push = router_push;
+
+        return Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(callback).toHaveBeenCalledWith(appState);
+            expect(router_push).toHaveBeenCalledWith('/');
             done();
         });
 
@@ -90,10 +91,13 @@ describe('initialize', () => {
 describe('methods should be delegated', () => {
     const client: Auth0Client = mock<Auth0Client>();
     const clientInstance = instance(client);
+    const app = createApp({render: () => null});
 
+    beforeAll(async () => {
+        await Plugin.initialize(app, clientInstance);
+    });
 
     it('logout', async () => {
-        await Plugin.initialize(clientInstance, jest.fn());
         Plugin.properties.logout();
         verify(client.logout(deepEqual(undefined))).called();
 
@@ -140,4 +144,22 @@ describe('methods should be delegated', () => {
         Plugin.properties.getTokenWithPopup({login_hint: 'some login hint'}, {timeoutInSeconds: 5000});
         verify(client.getTokenWithPopup(deepEqual({login_hint: 'some login hint'}), deepEqual({timeoutInSeconds: 5000}))).called();
     });
+
+    it('handleRedirectCallback', () => {
+        Plugin.properties.handleRedirectCallback();
+        verify(client.handleRedirectCallback(deepEqual(undefined))).called();
+
+        Plugin.properties.handleRedirectCallback('/test');
+        verify(client.handleRedirectCallback('/test')).called();
+    });
 });
+
+describe('properties should be reactive', () => {
+    it('isAuthenticated should be reactive ', () => {
+        Plugin.state.isAuthenticated = false;
+        expect(Plugin.properties.isAuthenticated).toBeFalsy();
+
+        Plugin.state.isAuthenticated = true;
+        expect(Plugin.properties.isAuthenticated).toBeTruthy();
+    });
+})

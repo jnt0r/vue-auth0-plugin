@@ -1,27 +1,25 @@
 import {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
 import Plugin from "./plugin";
-import {watchEffect} from "vue";
+import {watch} from "vue";
 
-export default (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-    const {isAuthenticated, loading, loginWithRedirect} = Plugin.properties;
-
-    const verify = () => {
-        // If the user is authenticated, continue with the route
-        if (isAuthenticated.value) {
+export default async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    // define verify method for later use
+    const verify = async () => {
+        if (Plugin.state.isAuthenticated) {
             return next();
         }
-        // Otherwise, log in
-        loginWithRedirect({appState: {targetUrl: to.fullPath}});
+        return Plugin.properties.loginWithRedirect({appState: {targetUrl: to.fullPath}})
     };
 
-    // If loading has already finished, check our auth state using `fn()`
-    if (!loading.value) {
+    // if not loading, verify request
+    if (!Plugin.state.loading) {
         return verify();
     }
 
-    // Watch for the loading property to change before we check isAuthenticated
-    watchEffect(() => {
-        if (!loading.value) {
+    // if loading, watch for loading property to change and then verify
+    const unwatch = watch(() => Plugin.state.loading, async () => {
+        if (!Plugin.state.loading) {
+            unwatch();
             return verify();
         }
     });

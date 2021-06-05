@@ -1,30 +1,26 @@
-import Auth0VuePlugin from "../src";
+import Auth0Plugin from "../src";
 import {createApp} from "vue";
 import {mount} from "@vue/test-utils";
 
-describe('Auth0VuePlugin', () => {
+describe('Auth0Plugin', () => {
     it('should be vue plugin', () => {
-        expect(Auth0VuePlugin).toMatchObject({
+        expect(Auth0Plugin).toMatchObject({
             install: expect.any(Function),
         });
     });
 
     it('should be installable', () => {
         const app = createApp({render: () => null});
-        app.use(Auth0VuePlugin, {
-            callbackRedirect: () => {
-            },
+        app.use(Auth0Plugin, {
             domain: 'domain',
             client_id: 'clientID',
         });
     });
 
-    it('should add global parameter', () => {
+    it('should add global property $auth', () => {
         const wrapper = mount({render: () => null}, {
             global: {
-                plugins: [[Auth0VuePlugin, {
-                    callbackRedirect: () => {
-                    },
+                plugins: [[Auth0Plugin, {
                     domain: 'domain',
                     client_id: 'clientID',
                 }]]
@@ -35,9 +31,9 @@ describe('Auth0VuePlugin', () => {
         expect(wrapper.vm.$auth).toBeDefined();
         // @ts-ignore
         expect(wrapper.vm.$auth).toMatchObject({
-            isAuthenticated: expect.anything(),
-            loading: expect.anything(),
-            user: expect.anything(),
+            isAuthenticated: expect.any(Boolean),
+            loading: expect.any(Boolean),
+            user: undefined,
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),
@@ -46,12 +42,6 @@ describe('Auth0VuePlugin', () => {
             loginWithPopup: expect.any(Function),
             logout: expect.any(Function),
         });
-        // @ts-ignore
-        expect(wrapper.vm.$auth.isAuthenticated.value).toBe(false);
-        // @ts-ignore
-        expect(wrapper.vm.$auth.loading.value).toBe(true);
-        // @ts-ignore
-        expect(wrapper.vm.$auth.user.value).toEqual(undefined);
     });
 
 });
