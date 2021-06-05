@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --coverage",
     "build": "npm run build:ts && npm run build:dts",
     "build:ts": "rollup -c rollup.config.js",
     "build:dts": "copyfiles -f src/vue.d.ts dist && concat -o dist/index.d.ts dist/index.d.ts src/concat.d.ts",
