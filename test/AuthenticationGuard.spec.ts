@@ -1,10 +1,9 @@
 import {RouteLocationNormalized} from "vue-router";
 import {instance, mock, when} from "ts-mockito";
 import authPlugin from "../src/plugin";
-import RouteGuard from "../src/routeGuard";
-import {watch} from "vue";
+import AuthenticationGuard from "../src/AuthenticationGuard";
 
-describe('RouteGuard', () => {
+describe('AuthenticationGuard', () => {
     it('should call loginWithRedirect when not authenticated', async () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
@@ -14,7 +13,7 @@ describe('RouteGuard', () => {
         authPlugin.state.loading = false;
         authPlugin.properties.loginWithRedirect = jest.fn();
 
-        await RouteGuard(instance(to), instance(from), next);
+        await AuthenticationGuard(instance(to), instance(from), next);
 
         return expect(authPlugin.properties.loginWithRedirect).toBeCalledWith(expect.objectContaining({
             appState: {targetUrl: '/targetRoute'}
@@ -29,7 +28,7 @@ describe('RouteGuard', () => {
         authPlugin.state.isAuthenticated = true;
         authPlugin.state.loading = false;
 
-        await RouteGuard(instance(to), instance(from), next);
+        await AuthenticationGuard(instance(to), instance(from), next);
 
         return expect(next).toBeCalled();
     });
@@ -42,7 +41,7 @@ describe('RouteGuard', () => {
         authPlugin.state.isAuthenticated = true;
         authPlugin.state.loading = true;
 
-        RouteGuard(instance(to), instance(from), next);
+        AuthenticationGuard(instance(to), instance(from), next);
 
         expect(next).not.toBeCalled();
 
@@ -62,7 +61,7 @@ describe('RouteGuard', () => {
         authPlugin.state.isAuthenticated = false;
         authPlugin.state.loading = true;
 
-        RouteGuard(instance(to), instance(from), next);
+        AuthenticationGuard(instance(to), instance(from), next);
 
         expect(authPlugin.properties.loginWithRedirect).not.toBeCalled();
 
