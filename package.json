@@ -27,6 +27,10 @@
   ],
   "author": "Jonathan Pollert",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnt0r/vue-auth0-plugin.git"
+  },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.15.0"
   },
