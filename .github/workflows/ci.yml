@@ -37,10 +37,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test
-        run: npm run test:ci
-        
-      - name: Show coverage report
-        uses: romeovs/lcov-reporter-action@v0.2.16
+      - name: Test and report coverage
+        uses: artiomtr/jest-coverage-report-action@v1.3
         with:
-          lcov-file: ./coverage/lcov.info
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            #   threshold: 80 # optional parameter
