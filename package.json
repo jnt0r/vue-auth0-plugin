@@ -23,7 +23,10 @@
   "keywords": [
     "auth0",
     "vue",
-    "plugin"
+    "plugin",
+    "wrapper",
+    "authentication",
+    "vuejs"
   ],
   "author": "Jonathan Pollert",
   "license": "MIT",
@@ -31,6 +34,10 @@
     "type": "git",
     "url": "git+https://github.com/jnt0r/vue-auth0-plugin.git"
   },
+  "bugs": {
+    "url": "https://github.com/jnt0r/vue-auth0-plugin/issues"
+  },
+  "homepage": "https://github.com/jnt0r/vue-auth0-plugin#readme",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.15.0"
   },
