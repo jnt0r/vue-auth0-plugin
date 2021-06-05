@@ -1,5 +1,10 @@
 # vue-auth0-plugin
 
+<a href="https://www.npmjs.com/package/vue-auth0-plugin"><img src="https://badgen.net/npm/v/vue-auth0-plugin" alt="Version"></a>
+<a href="https://www.npmjs.com/package/vue-auth0-plugin"><img src="https://badgen.net/npm/dt/vue-auth0-plugin" alt="Downloads"></a>
+<a href="https://www.npmjs.com/package/vue-auth0-plugin"><img src="https://badgen.net/npm/license/vue-auth0-plugin" alt="License"></a>
+<a href="https://vuejs.org/"><img src="https://badgen.net/badge/Vue/3.x/green" alt="Vue.js 3.x compatible"></a>
+
 Simple auth0 wrapper for Vue.js based on the [Auth0 Single Page App SDK](https://auth0.com/docs/libraries/auth0-single-page-app-sdk).
 
 ## Installation
