@@ -1,17 +1,17 @@
-import Auth0Plugin from "../src";
+import VueAuth0Plugin from "../src";
 import {createApp} from "vue";
 import {mount} from "@vue/test-utils";
 
-describe('Auth0Plugin', () => {
+describe('VueAuth0Plugin', () => {
     it('should be vue plugin', () => {
-        expect(Auth0Plugin).toMatchObject({
+        expect(VueAuth0Plugin).toMatchObject({
             install: expect.any(Function),
         });
     });
 
     it('should be installable', () => {
         const app = createApp({render: () => null});
-        app.use(Auth0Plugin, {
+        app.use(VueAuth0Plugin, {
             domain: 'domain',
             client_id: 'clientID',
         });
@@ -20,7 +20,7 @@ describe('Auth0Plugin', () => {
     it('should add global property $auth', () => {
         const wrapper = mount({render: () => null}, {
             global: {
-                plugins: [[Auth0Plugin, {
+                plugins: [[VueAuth0Plugin, {
                     domain: 'domain',
                     client_id: 'clientID',
                 }]]

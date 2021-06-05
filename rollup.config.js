@@ -75,7 +75,7 @@ function createConfig(format, output, plugins = []) {
     const isNodeBuild = format === 'cjs'
     const isBundlerESMBuild = /esm-bundler/.test(format)
 
-    if (isGlobalBuild) output.name = 'Auth0VuePlugin'
+    if (isGlobalBuild) output.name = 'VueAuth0Plugin'
 
     const shouldEmitDeclarations = !hasTSChecked
 

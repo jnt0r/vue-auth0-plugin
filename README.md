@@ -18,7 +18,7 @@ npm install --save vue-auth0-plugin
 Register the plugin in your main.ts
 
 ```
-app.use(Auth0VuePlugin, {
+app.use(VueAuth0Plugin, {
   domain: 'YOUR_AUTH0_DOMAIN',
   client_id: 'YOUR_CLIENT_ID'
 });
