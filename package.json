@@ -1,6 +1,6 @@
 {
   "name": "vue-auth0-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple auth0 wrapper for Vue.js",
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
@@ -28,10 +28,9 @@
   "author": "Jonathan Pollert",
   "license": "MIT",
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.13.6"
+    "@auth0/auth0-spa-js": "^1.15.0"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "^1.15.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@rollup/plugin-replace": "^2.3.4",
