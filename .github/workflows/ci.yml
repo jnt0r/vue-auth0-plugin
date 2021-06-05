@@ -36,8 +36,13 @@ jobs:
 
       - name: Build
         run: npm run build
+        
+      - name: Test
+        if: ${{ github.event_name == 'push' }}
+        run: npm run test:ci
 
       - name: Test and report coverage
+        if: ${{ github.event_name == 'pull_request' }}
         uses: artiomtr/jest-coverage-report-action@v1.3
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
