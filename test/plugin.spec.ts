@@ -35,7 +35,7 @@ describe('initialize', () => {
         when(client.isAuthenticated()).thenResolve(false);
 
         return Plugin.initialize(app, instance(client)).then(() => {
-            expect(Plugin.properties.isAuthenticated).toBeFalsy();
+            expect(Plugin.properties.authenticated).toBeFalsy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toBeUndefined();
             done();
@@ -52,7 +52,7 @@ describe('initialize', () => {
         when(client.isAuthenticated()).thenResolve(true);
 
         return Plugin.initialize(app, clientInstance).then(() => {
-            expect(Plugin.properties.isAuthenticated).toBeTruthy();
+            expect(Plugin.properties.authenticated).toBeTruthy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toEqual(user);
             done();
@@ -156,10 +156,10 @@ describe('methods should be delegated', () => {
 
 describe('properties should be reactive', () => {
     it('isAuthenticated should be reactive ', () => {
-        Plugin.state.isAuthenticated = false;
-        expect(Plugin.properties.isAuthenticated).toBeFalsy();
+        Plugin.state.authenticated = false;
+        expect(Plugin.properties.authenticated).toBeFalsy();
 
-        Plugin.state.isAuthenticated = true;
-        expect(Plugin.properties.isAuthenticated).toBeTruthy();
+        Plugin.state.authenticated = true;
+        expect(Plugin.properties.authenticated).toBeTruthy();
     });
 })

@@ -31,7 +31,7 @@ describe('VueAuth0Plugin', () => {
         expect(wrapper.vm.$auth).toBeDefined();
         // @ts-ignore
         expect(wrapper.vm.$auth).toMatchObject({
-            isAuthenticated: expect.any(Boolean),
+            authenticated: expect.any(Boolean),
             loading: expect.any(Boolean),
             user: undefined,
             getIdTokenClaims: expect.any(Function),

@@ -5,7 +5,7 @@ import {watch} from "vue";
 export default async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     // define verify method for later use
     const verify = async () => {
-        if (Plugin.state.isAuthenticated) {
+        if (Plugin.state.authenticated) {
             return next();
         }
         return Plugin.properties.loginWithRedirect({appState: {targetUrl: to.fullPath}})
