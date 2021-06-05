@@ -1,4 +1,4 @@
-import {App, reactive, readonly, ref} from "vue";
+import {App, reactive} from "vue";
 import {
     Auth0Client,
     GetIdTokenClaimsOptions,
