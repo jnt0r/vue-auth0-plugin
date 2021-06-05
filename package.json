@@ -1,7 +1,7 @@
 {
-  "name": "auth0-vue-plugin",
-  "version": "1.0.0-1",
-  "description": "",
+  "name": "vue-auth0-plugin",
+  "version": "1.0.0",
+  "description": "Simple auth0 wrapper for Vue.js",
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
   "unpkg": "dist/auth0-vue-plugin.global.js",
