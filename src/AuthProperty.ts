@@ -1,4 +1,5 @@
 import {
+    Auth0Client,
     GetIdTokenClaimsOptions,
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
@@ -14,6 +15,7 @@ export default interface AuthProperty {
     authenticated: boolean;
     loading: boolean;
     user?: User;
+    client?: Auth0Client,
     getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => Promise<IdToken>,
     // Any type defined by auth0-spa-js.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -32,6 +32,7 @@ describe('VueAuth0Plugin', () => {
             authenticated: expect.any(Boolean),
             loading: expect.any(Boolean),
             user: undefined,
+            client: undefined,
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),

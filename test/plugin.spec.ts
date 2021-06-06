@@ -1,5 +1,5 @@
 import { deepEqual, instance, mock, verify, when } from 'ts-mockito';
-import { Auth0Client, User } from '@auth0/auth0-spa-js';
+import createAuth0Client, { Auth0Client, User } from '@auth0/auth0-spa-js';
 import Plugin from '../src/plugin';
 import { createApp } from 'vue';
 
@@ -86,6 +86,16 @@ describe('initialize', () => {
             verify(client.handleRedirectCallback()).called();
 
             expect(routerPush).toHaveBeenCalledWith('/');
+            done();
+        });
+    });
+
+    it('should expose initialised Auth0Client as client property', async (done) => {
+        const client = await createAuth0Client({ client_id: '', domain: '' });
+
+        return Plugin.initialize(app, client).then(() => {
+            expect(Plugin.properties.client).toBeInstanceOf(Auth0Client);
+            expect(Plugin.properties.client).toEqual(client);
             done();
         });
     });

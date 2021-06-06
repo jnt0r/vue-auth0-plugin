@@ -31,6 +31,7 @@ const properties = reactive({
     authenticated: false,
     loading: true,
     user: undefined,
+    client: undefined,
     getIdTokenClaims,
     getTokenSilently,
     getTokenWithPopup,
@@ -63,8 +64,11 @@ Object.defineProperties(properties, {
 
 let client: Auth0Client;
 
-async function initialize (app: App, value: Auth0Client): Promise<void> {
-    client = value;
+async function initialize (app: App, authClient: Auth0Client): Promise<void> {
+    client = authClient;
+
+    // set client property to created Auth0Client instance
+    properties.client = client;
 
     try {
         // If the user is returning to the app after authentication
