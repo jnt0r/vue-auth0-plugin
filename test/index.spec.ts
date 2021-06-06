@@ -1,7 +1,7 @@
 import VueAuth0Plugin from '../src';
 import { createApp } from 'vue';
 import { mount } from '@vue/test-utils';
-import '../src/vue';
+import '../src/vue.d';
 
 describe('VueAuth0Plugin', () => {
     it('should be vue plugin', () => {
