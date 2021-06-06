@@ -27,11 +27,11 @@ app.use(VueAuth0Plugin, {
 Then you can use the plugin with `$auth`. For example:
 
 ```
-const isAuthenticated = $auth.isAuthenticated;
+const authenticated = $auth.authenticated;
 const loading = $auth.loading;
 const user = $auth.user;
 
-if (!$auth.isAuthenticated) {
+if (!$auth.authenticated) {
     $auth.loginWithRedirect();
 }
 ```

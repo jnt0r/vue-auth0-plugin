@@ -9,7 +9,7 @@ describe('AuthenticationGuard', () => {
         const from: RouteLocationNormalized = mock();
         const next = jest.fn();
         when(to.fullPath).thenReturn('/targetRoute');
-        authPlugin.state.isAuthenticated = false;
+        authPlugin.state.authenticated = false;
         authPlugin.state.loading = false;
         authPlugin.properties.loginWithRedirect = jest.fn();
 
@@ -25,7 +25,7 @@ describe('AuthenticationGuard', () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
 
-        authPlugin.state.isAuthenticated = true;
+        authPlugin.state.authenticated = true;
         authPlugin.state.loading = false;
 
         await AuthenticationGuard(instance(to), instance(from), next);
@@ -38,7 +38,7 @@ describe('AuthenticationGuard', () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
         authPlugin.properties.loginWithRedirect = jest.fn();
-        authPlugin.state.isAuthenticated = true;
+        authPlugin.state.authenticated = true;
         authPlugin.state.loading = true;
 
         AuthenticationGuard(instance(to), instance(from), next);
@@ -58,7 +58,7 @@ describe('AuthenticationGuard', () => {
         when(to.fullPath).thenReturn('/targetRoute');
         const from: RouteLocationNormalized = mock();
         authPlugin.properties.loginWithRedirect = jest.fn();
-        authPlugin.state.isAuthenticated = false;
+        authPlugin.state.authenticated = false;
         authPlugin.state.loading = true;
 
         AuthenticationGuard(instance(to), instance(from), next);
