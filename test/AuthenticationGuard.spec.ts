@@ -1,7 +1,7 @@
-import {RouteLocationNormalized} from "vue-router";
-import {instance, mock, when} from "ts-mockito";
-import authPlugin from "../src/plugin";
-import AuthenticationGuard from "../src/AuthenticationGuard";
+import { RouteLocationNormalized } from 'vue-router';
+import { instance, mock, when } from 'ts-mockito';
+import authPlugin from '../src/plugin';
+import AuthenticationGuard from '../src/AuthenticationGuard';
 
 describe('AuthenticationGuard', () => {
     it('should call loginWithRedirect when not authenticated', async () => {
@@ -16,7 +16,7 @@ describe('AuthenticationGuard', () => {
         await AuthenticationGuard(instance(to), instance(from), next);
 
         return expect(authPlugin.properties.loginWithRedirect).toBeCalledWith(expect.objectContaining({
-            appState: {targetUrl: '/targetRoute'}
+            appState: { targetUrl: '/targetRoute' },
         }));
     });
 
@@ -47,13 +47,13 @@ describe('AuthenticationGuard', () => {
 
         authPlugin.state.loading = false;
 
-        await new Promise((r) => setTimeout(r, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         return expect(next).toBeCalled();
     });
 
     it('should call loginWithRedirect when finished loading', async () => {
-        let next = jest.fn();
+        const next = jest.fn();
         const to: RouteLocationNormalized = mock();
         when(to.fullPath).thenReturn('/targetRoute');
         const from: RouteLocationNormalized = mock();
@@ -68,10 +68,10 @@ describe('AuthenticationGuard', () => {
         authPlugin.state.loading = false;
 
         // Needs small delay because of watchEffect.
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         return expect(authPlugin.properties.loginWithRedirect).toBeCalledWith(expect.objectContaining({
-            appState: {targetUrl: '/targetRoute'}
+            appState: { targetUrl: '/targetRoute' },
         }));
     });
 });

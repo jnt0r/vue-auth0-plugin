@@ -7,14 +7,16 @@ import {
     PopupConfigOptions,
     PopupLoginOptions,
     RedirectLoginOptions,
-    User
-} from "@auth0/auth0-spa-js";
+    User,
+} from '@auth0/auth0-spa-js';
 
 export default interface AuthProperty {
     authenticated: boolean;
     loading: boolean;
     user?: User;
     getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => Promise<IdToken>,
+    // Any type defined by auth0-spa-js.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<any>,
     getTokenWithPopup: (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) => Promise<string>,
     handleRedirectCallback: (url?: string) => Promise<void>,

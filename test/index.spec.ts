@@ -1,6 +1,7 @@
-import VueAuth0Plugin from "../src";
-import {createApp} from "vue";
-import {mount} from "@vue/test-utils";
+import VueAuth0Plugin from '../src';
+import { createApp } from 'vue';
+import { mount } from '@vue/test-utils';
+import '../src/vue';
 
 describe('VueAuth0Plugin', () => {
     it('should be vue plugin', () => {
@@ -10,7 +11,7 @@ describe('VueAuth0Plugin', () => {
     });
 
     it('should be installable', () => {
-        const app = createApp({render: () => null});
+        const app = createApp({ render: () => null });
         app.use(VueAuth0Plugin, {
             domain: 'domain',
             client_id: 'clientID',
@@ -18,18 +19,15 @@ describe('VueAuth0Plugin', () => {
     });
 
     it('should add global property $auth', () => {
-        const wrapper = mount({render: () => null}, {
+        const wrapper = mount({ render: () => null }, {
             global: {
-                plugins: [[VueAuth0Plugin, {
+                plugins: [ [ VueAuth0Plugin, {
                     domain: 'domain',
                     client_id: 'clientID',
-                }]]
-            }
+                } ] ],
+            },
         });
 
-        // @ts-ignore
-        expect(wrapper.vm.$auth).toBeDefined();
-        // @ts-ignore
         expect(wrapper.vm.$auth).toMatchObject({
             authenticated: expect.any(Boolean),
             loading: expect.any(Boolean),
@@ -43,5 +41,4 @@ describe('VueAuth0Plugin', () => {
             logout: expect.any(Function),
         });
     });
-
 });

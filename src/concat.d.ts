@@ -1,1 +1,1 @@
-import "./vue";
+import './vue';

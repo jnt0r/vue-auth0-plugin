@@ -1,4 +1,4 @@
-import {App, reactive} from "vue";
+import { App, reactive } from 'vue';
 import {
     Auth0Client,
     GetIdTokenClaimsOptions,
@@ -9,9 +9,9 @@ import {
     PopupConfigOptions,
     PopupLoginOptions,
     RedirectLoginOptions,
-    User
-} from "@auth0/auth0-spa-js";
-import AuthProperty from "./AuthProperty";
+    User,
+} from '@auth0/auth0-spa-js';
+import AuthProperty from './AuthProperty';
 
 const state = reactive({
     loading: true,
@@ -42,35 +42,35 @@ const properties = reactive({
 
 Object.defineProperties(properties, {
     authenticated: {
-        get() {
+        get () {
             return state.authenticated;
         },
         enumerable: false,
     },
     loading: {
-        get() {
+        get () {
             return state.loading;
         },
         enumerable: false,
     },
     user: {
-        get() {
+        get () {
             return state.user;
         },
         enumerable: false,
-    }
+    },
 });
 
 let client: Auth0Client;
 
-async function initialize(app: App, value: Auth0Client): Promise<void> {
+async function initialize (app: App, value: Auth0Client): Promise<void> {
     client = value;
 
     try {
         // If the user is returning to the app after authentication
         if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
             // handle the redirect and retrieve tokens
-            const {appState} = await client.handleRedirectCallback();
+            const { appState } = await client.handleRedirectCallback();
 
             // Notify subscribers that the redirect callback has happened, passing the appState
             // (useful for retrieving any pre-authentication state)
@@ -89,10 +89,10 @@ async function initialize(app: App, value: Auth0Client): Promise<void> {
 export default {
     state,
     properties,
-    initialize
-}
+    initialize,
+};
 
-async function loginWithPopup(options?: PopupLoginOptions, config?: PopupConfigOptions): Promise<void> {
+async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfigOptions): Promise<void> {
     state.popupOpen = true;
 
     try {
@@ -107,7 +107,7 @@ async function loginWithPopup(options?: PopupLoginOptions, config?: PopupConfigO
     state.authenticated = true;
 }
 
-async function handleRedirectCallback(url?: string): Promise<void> {
+async function handleRedirectCallback (url?: string): Promise<void> {
     state.loading = true;
 
     try {
@@ -121,22 +121,24 @@ async function handleRedirectCallback(url?: string): Promise<void> {
     }
 }
 
-function loginWithRedirect(options?: RedirectLoginOptions): Promise<void> {
+function loginWithRedirect (options?: RedirectLoginOptions): Promise<void> {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims(options?: GetIdTokenClaimsOptions): Promise<IdToken> {
+function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken> {
     return client.getIdTokenClaims(options);
 }
 
-function getTokenSilently(options?: GetTokenSilentlyOptions): Promise<any> {
+// Type any defined by auth0-spa-js
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<any> {
     return client.getTokenSilently(options);
 }
 
-function getTokenWithPopup(options?: GetTokenWithPopupOptions, config?: PopupConfigOptions): Promise<string> {
+function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions): Promise<string> {
     return client.getTokenWithPopup(options, config);
 }
 
-function logout(options?: LogoutOptions): void {
+function logout (options?: LogoutOptions): void {
     return client.logout(options);
 }

@@ -1,14 +1,18 @@
-import {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
-import Plugin from "./plugin";
-import {watch} from "vue";
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import Plugin from './plugin';
+import { watch } from 'vue';
 
-export default async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+export default async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext,
+): Promise<void> => {
     // define verify method for later use
     const verify = async () => {
         if (Plugin.state.authenticated) {
             return next();
         }
-        return Plugin.properties.loginWithRedirect({appState: {targetUrl: to.fullPath}})
+        return Plugin.properties.loginWithRedirect({ appState: { targetUrl: to.fullPath } });
     };
 
     // if not loading, verify request
