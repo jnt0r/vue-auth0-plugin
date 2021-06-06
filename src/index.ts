@@ -7,7 +7,7 @@ export default {
     install (app: App, options: Auth0ClientOptions): void {
         app.config.globalProperties.$auth = Plugin.properties;
 
-        createAuth0Client(options).then((value) => Plugin.initialize(app, value));
+        createAuth0Client(options).then((client) => Plugin.initialize(app, client));
     },
 };
 
