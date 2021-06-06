@@ -11,7 +11,7 @@ import {
 } from "@auth0/auth0-spa-js";
 
 export default interface AuthProperty {
-    isAuthenticated: boolean;
+    authenticated: boolean;
     loading: boolean;
     user?: User;
     getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => Promise<IdToken>,

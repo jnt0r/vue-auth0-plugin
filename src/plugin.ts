@@ -15,20 +15,20 @@ import AuthProperty from "./AuthProperty";
 
 const state = reactive({
     loading: true,
-    isAuthenticated: false,
+    authenticated: false,
     user: undefined,
     popupOpen: false,
     error: undefined,
 } as {
     loading: boolean,
-    isAuthenticated: boolean,
+    authenticated: boolean,
     user?: User,
     popupOpen: boolean,
     error?: string
 });
 
 const properties = reactive({
-    isAuthenticated: false,
+    authenticated: false,
     loading: true,
     user: undefined,
     getIdTokenClaims,
@@ -41,9 +41,9 @@ const properties = reactive({
 }) as AuthProperty;
 
 Object.defineProperties(properties, {
-    isAuthenticated: {
+    authenticated: {
         get() {
-            return state.isAuthenticated;
+            return state.authenticated;
         },
         enumerable: false,
     },
@@ -80,7 +80,7 @@ async function initialize(app: App, value: Auth0Client): Promise<void> {
         state.error = e;
     } finally {
         // Initialize our internal authentication state
-        state.isAuthenticated = await client.isAuthenticated();
+        state.authenticated = await client.isAuthenticated();
         state.user = await client.getUser();
         state.loading = false;
     }
@@ -104,7 +104,7 @@ async function loginWithPopup(options?: PopupLoginOptions, config?: PopupConfigO
     }
 
     state.user = await client.getUser();
-    state.isAuthenticated = true;
+    state.authenticated = true;
 }
 
 async function handleRedirectCallback(url?: string): Promise<void> {
@@ -113,7 +113,7 @@ async function handleRedirectCallback(url?: string): Promise<void> {
     try {
         await client.handleRedirectCallback(url);
         state.user = await client.getUser();
-        state.isAuthenticated = true;
+        state.authenticated = true;
     } catch (e) {
         state.error = e;
     } finally {
