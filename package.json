@@ -2,42 +2,26 @@
   "name": "vue-auth0-plugin",
   "version": "0.0.0-semantically-released",
   "description": "Simple auth0 wrapper for Vue.js",
+  "author": "Jonathan Pollert",
+  "scripts": {
+    "build": "npm run build:ts && npm run build:dts",
+    "lint": "vue-cli-service lint",
+    "build:dts": "copyfiles -f src/vue.d.ts dist && concat -o dist/index.d.ts dist/index.d.ts src/concat.d.ts",
+    "build:ts": "rollup -c rollup.config.js",
+    "release": "np --tag=beta",
+    "test": "jest",
+    "test:ci": "jest --coverage"
+  },
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
-  "unpkg": "dist/auth0-vue-plugin.global.js",
   "browser": "dist/auth0-vue-plugin.browser.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "jest",
-    "test:ci": "jest --coverage",
-    "build": "npm run build:ts && npm run build:dts",
-    "build:ts": "rollup -c rollup.config.js",
-    "build:dts": "copyfiles -f src/vue.d.ts dist && concat -o dist/index.d.ts dist/index.d.ts src/concat.d.ts",
-    "release": "np --tag=beta"
-  },
+  "unpkg": "dist/auth0-vue-plugin.global.js",
   "files": [
     "dist/**/*.js",
     "dist/*.d.ts",
     "types"
   ],
-  "keywords": [
-    "auth0",
-    "vue",
-    "plugin",
-    "wrapper",
-    "authentication",
-    "vuejs"
-  ],
-  "author": "Jonathan Pollert",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jnt0r/vue-auth0-plugin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jnt0r/vue-auth0-plugin/issues"
-  },
-  "homepage": "https://github.com/jnt0r/vue-auth0-plugin#readme",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.15.0"
   },
@@ -46,9 +30,20 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.3.4",
     "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^2.0.0-beta.14",
     "concat": "^1.0.3",
     "copyfiles": "^2.4.1",
+    "eslint": "^7.28.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^7.0.0",
     "jest": "^26.6.3",
     "np": "^7.4.0",
     "rollup": "^2.39.0",
@@ -66,12 +61,29 @@
     "vue": "^3.0.5",
     "vue-router": "^4.0.3"
   },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "bugs": {
+    "url": "https://github.com/jnt0r/vue-auth0-plugin/issues"
+  },
+  "homepage": "https://github.com/jnt0r/vue-auth0-plugin#readme",
+  "keywords": [
+    "auth0",
+    "vue",
+    "plugin",
+    "wrapper",
+    "authentication",
+    "vuejs"
+  ],
+  "license": "MIT",
   "peerDependenciesMeta": {
     "vue-router": {
       "optional": true
     }
   },
-  "jest": {
-    "preset": "ts-jest"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnt0r/vue-auth0-plugin.git"
   }
 }
