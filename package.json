@@ -62,7 +62,8 @@
     "vue-router": "^4.0.3"
   },
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
   },
   "bugs": {
     "url": "https://github.com/jnt0r/vue-auth0-plugin/issues"
