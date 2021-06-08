@@ -38,7 +38,7 @@ describe('initialize', () => {
         when(client.getUser()).thenResolve(undefined);
         when(client.isAuthenticated()).thenResolve(false);
 
-        return Plugin.initialize(app, instance(client)).then(() => {
+        Plugin.initialize(app, instance(client)).then(() => {
             expect(Plugin.properties.authenticated).toBeFalsy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toBeUndefined();
@@ -46,7 +46,7 @@ describe('initialize', () => {
         });
     });
 
-    test('should set state when authenticated', async (done) => {
+    test('should set state when authenticated', (done) => {
         const clientInstance = instance(client);
         const user: User = {
             name: 'mike',
@@ -55,7 +55,7 @@ describe('initialize', () => {
         when(client.getUser()).thenResolve(user);
         when(client.isAuthenticated()).thenResolve(true);
 
-        return Plugin.initialize(app, clientInstance).then(() => {
+        Plugin.initialize(app, clientInstance).then(() => {
             expect(Plugin.properties.authenticated).toBeTruthy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toEqual(user);
@@ -63,7 +63,7 @@ describe('initialize', () => {
         });
     });
 
-    test('should handle redirect and navigate using router', async (done) => {
+    test('should handle redirect and navigate using router', (done) => {
         const clientInstance = instance(client);
         const appState = {};
 
@@ -82,7 +82,7 @@ describe('initialize', () => {
         app.config.globalProperties.$router = {};
         app.config.globalProperties.$router.push = routerPush;
 
-        return Plugin.initialize(app, clientInstance).then(() => {
+        Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
             expect(routerPush).toHaveBeenCalledWith('/');
@@ -90,13 +90,12 @@ describe('initialize', () => {
         });
     });
 
-    it('should expose initialised Auth0Client as client property', async (done) => {
+    it('should expose initialised Auth0Client as client property', async () => {
         const client = await createAuth0Client({ client_id: '', domain: '' });
 
         return Plugin.initialize(app, client).then(() => {
             expect(Plugin.properties.client).toBeInstanceOf(Auth0Client);
             expect(Plugin.properties.client).toEqual(client);
-            done();
         });
     });
 });
