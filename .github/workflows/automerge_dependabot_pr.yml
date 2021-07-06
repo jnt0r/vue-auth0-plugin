@@ -11,4 +11,4 @@ jobs:
         with:
           allowed-actors: dependabot[bot]
           allowed-update-types: devDependencies:minor, devDependencies:patch, dependencies:minor, dependencies:patch
-          merge-method: squash
+          merge-method: merge
