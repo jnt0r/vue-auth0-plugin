@@ -7,6 +7,8 @@
 
 Simple auth0 wrapper for Vue.js based on the [Auth0 Single Page App SDK](https://auth0.com/docs/libraries/auth0-single-page-app-sdk).
 
+Currently, only compatible with Vue 3. Support for Vue 2 is planned.
+
 ## Installation
 
 ```
