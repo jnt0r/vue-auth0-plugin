@@ -12,3 +12,4 @@ jobs:
           allowed-actors: dependabot[bot]
           allowed-update-types: devDependencies:minor, devDependencies:patch, dependencies:minor, dependencies:patch
           merge-method: squash
+          repo-token: ${{ secrets.PAT }}
