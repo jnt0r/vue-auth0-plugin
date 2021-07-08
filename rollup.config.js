@@ -141,6 +141,7 @@ function createReplacePlugin (
     isNodeBuild,
 ) {
     const replacements = {
+        preventAssignment: true,
         __COMMIT__: `"${process.env.COMMIT}"`,
         __VERSION__: `"${pkg.version}"`,
         __DEV__: isBundlerESMBuild
