@@ -143,6 +143,6 @@ function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupCo
     return client.getTokenWithPopup(options, config);
 }
 
-function logout (options?: LogoutOptions): void {
+function logout (options?: LogoutOptions): Promise<void> | void {
     return client.logout(options);
 }
