@@ -1,18 +1,18 @@
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import { RouteLocationNormalized } from 'vue-router';
 import Plugin from './plugin';
 import { watch } from 'vue';
 
 export default async (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    next: NavigationGuardNext,
-): Promise<void> => {
+): Promise<boolean> => {
     // define verify method for later use
     const verify = async () => {
         if (Plugin.state.authenticated) {
-            return next();
+            return true;
         }
-        return Plugin.properties.loginWithRedirect({ appState: { targetUrl: to.fullPath } });
+        await Plugin.properties.loginWithRedirect({ appState: { targetUrl: to.fullPath } });
+        return false;
     };
 
     // if not loading, verify request
@@ -21,10 +21,12 @@ export default async (
     }
 
     // if loading, watch for loading property to change and then verify
-    const unwatch = watch(() => Plugin.state.loading, async () => {
-        if (!Plugin.state.loading) {
-            unwatch();
-            return verify();
-        }
+    return new Promise<boolean>((resolve) => {
+        const unwatch = watch(() => Plugin.state.loading, async () => {
+            if (!Plugin.state.loading) {
+                unwatch();
+                resolve(verify());
+            }
+        });
     });
 };
