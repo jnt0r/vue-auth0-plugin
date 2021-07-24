@@ -7,53 +7,55 @@ describe('AuthenticationGuard', () => {
     it('should call loginWithRedirect when not authenticated', async () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
-        const next = jest.fn();
         when(to.fullPath).thenReturn('/targetRoute');
         authPlugin.state.authenticated = false;
         authPlugin.state.loading = false;
         authPlugin.properties.loginWithRedirect = jest.fn();
 
-        await AuthenticationGuard(instance(to), instance(from), next);
+        const returnValue = await AuthenticationGuard(instance(to), instance(from));
 
+        expect(returnValue).toBeFalsy();
         return expect(authPlugin.properties.loginWithRedirect).toBeCalledWith(expect.objectContaining({
             appState: { targetUrl: '/targetRoute' },
         }));
     });
 
-    it('should call next() when authenticated and not loading', async () => {
-        const next = jest.fn();
+    it('should return true when authenticated and not loading', async () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
 
         authPlugin.state.authenticated = true;
         authPlugin.state.loading = false;
 
-        await AuthenticationGuard(instance(to), instance(from), next);
-
-        return expect(next).toBeCalled();
+        return expect(AuthenticationGuard(instance(to), instance(from))).resolves.toBeTruthy();
     });
 
-    it('should call next() when finished loading', async () => {
-        const next = jest.fn();
+    it('should return true when finished loading', async () => {
         const to: RouteLocationNormalized = mock();
         const from: RouteLocationNormalized = mock();
         authPlugin.properties.loginWithRedirect = jest.fn();
         authPlugin.state.authenticated = true;
         authPlugin.state.loading = true;
 
-        AuthenticationGuard(instance(to), instance(from), next);
+        let resolved = false;
+        let returnValue;
+        AuthenticationGuard(instance(to), instance(from))
+            .then((value) => {
+                resolved = true;
+                returnValue = value;
+            });
 
-        expect(next).not.toBeCalled();
+        expect(resolved).toBeFalsy();
 
         authPlugin.state.loading = false;
 
         await new Promise((resolve) => setTimeout(resolve, 100));
 
-        return expect(next).toBeCalled();
+        expect(resolved).toBeTruthy();
+        expect(returnValue).toBeTruthy();
     });
 
     it('should call loginWithRedirect when finished loading', async () => {
-        const next = jest.fn();
         const to: RouteLocationNormalized = mock();
         when(to.fullPath).thenReturn('/targetRoute');
         const from: RouteLocationNormalized = mock();
@@ -61,7 +63,7 @@ describe('AuthenticationGuard', () => {
         authPlugin.state.authenticated = false;
         authPlugin.state.loading = true;
 
-        AuthenticationGuard(instance(to), instance(from), next);
+        AuthenticationGuard(instance(to), instance(from));
 
         expect(authPlugin.properties.loginWithRedirect).not.toBeCalled();
 
