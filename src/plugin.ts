@@ -76,10 +76,6 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
             // handle the redirect and retrieve tokens
             const { appState } = await client.handleRedirectCallback();
 
-            window.history.replaceState(
-                { ...window.history.state, code: undefined, state: undefined },
-                document.title, window.location.pathname);
-
             // Notify subscribers that the redirect callback has happened, passing the appState
             // (useful for retrieving any pre-authentication state)
             app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
