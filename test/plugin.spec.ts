@@ -98,6 +98,18 @@ describe('initialize', () => {
             expect(Plugin.properties.client).toEqual(client);
         });
     });
+
+    it('should remove code and state properties from historystate', async () => {
+        window.history.pushState(
+            { someOtherProperty: 'ShouldStayInState', code: 'SomeCode', state: 'SomeState' }, '', '');
+
+        expect(window.history.state).toEqual(
+            { someOtherProperty: 'ShouldStayInState', code: 'SomeCode', state: 'SomeState' });
+
+        return Plugin.initialize(app, instance(client)).then(() => {
+            expect(window.history.state).toEqual({ someOtherProperty: 'ShouldStayInState' });
+        });
+    });
 });
 
 describe('methods should be delegated', () => {
