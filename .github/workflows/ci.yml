@@ -38,6 +38,7 @@ jobs:
             #   threshold: 80 # optional parameter
 
       - name: Release
+        if: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
