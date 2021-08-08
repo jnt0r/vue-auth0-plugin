@@ -37,10 +37,6 @@ jobs:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             #   threshold: 80 # optional parameter
 
-  release_or_preview:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Release
         if: ${{ github.event_name == 'push' }}
         env:
