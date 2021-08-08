@@ -61,6 +61,8 @@ Or in a component
   </div>
 </template>
 
+All methods of the Auth0 client are mirrored to the `$auth` property. Alternatively the raw Auth0 client instance is exposed as `$auth.client`.
+
 ```
 
 ## Changelog
