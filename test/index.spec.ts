@@ -1,7 +1,8 @@
-import VueAuth0Plugin from '../src';
+import VueAuth0Plugin, { AuthenticationState } from '../src';
 import { createApp } from 'vue';
 import { mount } from '@vue/test-utils';
 import '../src/vue.d';
+import Plugin from '../src/plugin';
 
 describe('VueAuth0Plugin', () => {
     it('should be vue plugin', () => {
@@ -41,5 +42,13 @@ describe('VueAuth0Plugin', () => {
             loginWithPopup: expect.any(Function),
             logout: expect.any(Function),
         });
+    });
+
+    it('should export AuthenticationState', () => {
+        expect(AuthenticationState).toEqual(Plugin.state);
+        Plugin.state.loading = true;
+        Plugin.state.authenticated = true;
+        Plugin.state.user = { name: 'TestUser' };
+        expect(AuthenticationState).toEqual(Plugin.state);
     });
 });
