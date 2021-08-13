@@ -62,6 +62,16 @@ Or in a component
 </template>
 ```
 
+If you want to use the state of authentication when you do not have access to the Vue instance, you can use the exported AuthenticationState.
+
+```js
+import { AuthenticationState } from 'vue-auth0-plugin';
+
+if (!AuthenticationState.authenticated) {
+    // do something here
+}
+```
+
 ## AuthenticationGuard
 
 The plugin implements a Vue Router NavigationGuard to secure routes with Auth0. The example below shows how to use this AuthenticationGuard.
