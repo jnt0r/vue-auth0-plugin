@@ -71,7 +71,9 @@
           ]
         }
       }
-    ]
+    ],
+    "@semantic-release/npm",
+    "@semantic-release/github"
   ],
   "preset": "conventionalcommits"
 }
