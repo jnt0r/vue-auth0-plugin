@@ -60,9 +60,41 @@ Or in a component
     <button v-on:click="$auth.logout()">Logout</button>
   </div>
 </template>
+```
 
 All methods of the Auth0 client are mirrored to the `$auth` property. Alternatively the raw Auth0 client instance is exposed as `$auth.client`.
 
+If you want to use the state of authentication when you do not have access to the Vue instance, you can use the exported AuthenticationState.
+
+```js
+import { AuthenticationState } from 'vue-auth0-plugin';
+
+if (!AuthenticationState.authenticated) {
+    // do something here
+}
+```
+
+## AuthenticationGuard
+
+The plugin implements a Vue Router NavigationGuard to secure routes with Auth0. The example below shows how to use this AuthenticationGuard.
+
+```js
+import { AuthenticationGuard } from 'vue-auth0-plugin';
+
+let routes = [
+    ...
+    {
+        path: '/private',
+        name: 'PrivateRoute',
+        component: () => import(/* webpackChunkName: "private" */ '../views/Private.vue'),
+        beforeEnter: AuthenticationGuard,
+    },
+];
+
+const router = createRouter({
+  history: createWebHistory(YOUR_BASE_URL),
+  routes,
+});
 ```
 
 ## Changelog
