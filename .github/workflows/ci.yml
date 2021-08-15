@@ -27,15 +27,14 @@ jobs:
         run: npm run build
 
       - name: Test
-        if: ${{ github.event_name == 'push' }}
         run: npm run test:ci
 
-      - name: Test and report coverage
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: artiomtr/jest-coverage-report-action@v1.3
+      - name: Upload Coverage report
+        uses: codecov/codecov-action@v2
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            #   threshold: 80 # optional parameter
+          directory: ./coverage # optional
+          flags: unittests # optional
+          verbose: true # optional (default = false)
 
       - name: Release
         if: ${{ github.event_name == 'push' }}
