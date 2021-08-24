@@ -72,6 +72,14 @@ if (!AuthenticationState.authenticated) {
 }
 ```
 
+If you want to use the properties provided by Auth0 when you do not have access to the Vue instance, you can use the exported AuthenticationProperties.
+
+```js
+import { AuthenticationProperties as auth0 } from 'vue-auth0-plugin';
+
+const token = auth0.getTokenSilently();
+```
+
 ## AuthenticationGuard
 
 The plugin implements a Vue Router NavigationGuard to secure routes with Auth0. The example below shows how to use this AuthenticationGuard.
