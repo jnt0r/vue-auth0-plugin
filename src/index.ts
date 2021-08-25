@@ -12,4 +12,5 @@ export default {
 };
 
 const AuthenticationState = Plugin.state;
-export { AuthenticationGuard, AuthenticationState };
+const AuthenticationProperties = Plugin.properties;
+export { AuthenticationGuard, AuthenticationState, AuthenticationProperties };
