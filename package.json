@@ -26,7 +26,7 @@
     "@auth0/auth0-spa-js": "^1.15.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^3.0.0",
     "@types/jest": "^27.0.1",
