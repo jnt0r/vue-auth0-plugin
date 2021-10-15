@@ -27,9 +27,37 @@ describe('VueAuth0Plugin', () => {
                     client_id: 'clientID',
                 } ] ],
             },
+
         });
 
         expect(wrapper.vm.$auth).toMatchObject({
+            authenticated: expect.any(Boolean),
+            loading: expect.any(Boolean),
+            user: undefined,
+            client: undefined,
+            getIdTokenClaims: expect.any(Function),
+            getTokenSilently: expect.any(Function),
+            getTokenWithPopup: expect.any(Function),
+            handleRedirectCallback: expect.any(Function),
+            loginWithRedirect: expect.any(Function),
+            loginWithPopup: expect.any(Function),
+            logout: expect.any(Function),
+        });
+    });
+
+    it('should provide property auth', () => {
+        const wrapper = mount({ render: () => null, inject: [ 'auth' ] }, {
+            global: {
+                plugins: [ [ VueAuth0Plugin, {
+                    domain: 'domain',
+                    client_id: 'clientID',
+                } ] ],
+            },
+        });
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(wrapper.vm.auth).toMatchObject({
             authenticated: expect.any(Boolean),
             loading: expect.any(Boolean),
             user: undefined,
