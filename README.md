@@ -21,7 +21,7 @@ npm install --save vue-auth0-plugin
 
 ## Usage
 
-Register the plugin in your main.ts
+Register the plugin in your main.ts file. For a list of available options, take a look here: [https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html](https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html)
 
 ```js
 import { createApp } from 'vue';
