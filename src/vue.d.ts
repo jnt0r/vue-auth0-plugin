@@ -7,9 +7,6 @@ import AuthProperty from './AuthProperty';
 
 declare module '@vue/runtime-core' {
     interface ComponentCustomProperties {
-        /**
-         * @deprecated The global property $auth should not be used. Use ´inject('auth')´ instead.
-         */
         $auth: AuthProperty;
     }
 }

@@ -5,9 +5,7 @@ import AuthenticationGuard from './AuthenticationGuard';
 
 export default {
     install (app: App, options: Auth0ClientOptions): void {
-        // global $auth property is deprecated
         app.config.globalProperties.$auth = Plugin.properties;
-        app.provide('auth', Plugin.properties);
 
         createAuth0Client(options).then((client) => Plugin.initialize(app, client));
     },
