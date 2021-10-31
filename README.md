@@ -4,6 +4,7 @@
 <a href="https://www.npmjs.com/package/vue-auth0-plugin"><img src="https://badgen.net/npm/dt/vue-auth0-plugin" alt="Downloads"></a>
 <a href="https://www.npmjs.com/package/vue-auth0-plugin"><img src="https://badgen.net/npm/license/vue-auth0-plugin" alt="License"></a>
 <a href="https://vuejs.org/"><img src="https://badgen.net/badge/Vue/3.x/green" alt="Vue.js 3.x compatible"></a>
+[![codecov](https://codecov.io/gh/jnt0r/vue-auth0-plugin/branch/master/graph/badge.svg?token=VFTFA1Y8GI)](https://codecov.io/gh/jnt0r/vue-auth0-plugin)
 
 Simple Auth0 wrapper for Vue.js based on the [Auth0 Single Page App SDK](https://auth0.com/docs/libraries/auth0-single-page-app-sdk)
 
@@ -21,7 +22,7 @@ npm install --save vue-auth0-plugin
 
 ## Usage
 
-Register the plugin in your main.ts
+Register the plugin in your main.ts file. For a list of available options, take a look here: [https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html](https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html)
 
 ```js
 import { createApp } from 'vue';
@@ -37,15 +38,17 @@ app.use(VueAuth0Plugin, {
 app.mount('#app');
 ```
 
-Then Auth0 is accessible and controllable by the `$auth` property. For example:
+Then Auth0 can be injected as ´auth´ like the example below. For more information about provide/inject, take a look here [https://v3.vuejs.org/guide/component-provide-inject.html](https://v3.vuejs.org/guide/component-provide-inject.html). For example:
 
 ```js
-const authenticated = $auth.authenticated;
-const loading = $auth.loading;
-const user = $auth.user;
+const auth = inject('auth') as AuthenticationProperties;
 
-if (!$auth.authenticated) {
-    $auth.loginWithRedirect();
+const authenticated = auth.authenticated;
+const loading = auth.loading;
+const user = auth.user;
+
+if (!auth.authenticated) {
+    auth.loginWithRedirect();
 }
 ```
 
@@ -54,12 +57,19 @@ Or in a component
 ```html
 <template>
   <div class="about">
-    <h1>You are logged in as {{$auth.user.name}} ({{ $auth.user.nickname }})</h1>
-    <img :src="$auth.user.picture" alt="Profile picture"/>
-
-    <button v-on:click="$auth.logout()">Logout</button>
+    <h1>You are logged in as {{ auth.user.name }} ({{ auth.user.nickname }})</h1>
+    <img :src="auth.user.picture" alt="Profile picture"/>
+    <button v-on:click="auth.logout()">Logout</button>
   </div>
 </template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+@Options({
+  inject: ['auth'],
+})
+export default class MyComponent extends Vue {}
+</script>
+
 ```
 
 All methods of the Auth0 client are mirrored to the `$auth` property. Alternatively the raw Auth0 client instance is exposed as `$auth.client`.
@@ -72,6 +82,14 @@ import { AuthenticationState } from 'vue-auth0-plugin';
 if (!AuthenticationState.authenticated) {
     // do something here
 }
+```
+
+If you want to use the properties provided by Auth0 when you do not have access to the Vue instance, you can use the exported AuthenticationProperties.
+
+```js
+import { AuthenticationProperties as auth0 } from 'vue-auth0-plugin';
+
+const token = auth0.getTokenSilently();
 ```
 
 ## AuthenticationGuard

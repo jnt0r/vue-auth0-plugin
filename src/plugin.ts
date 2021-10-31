@@ -84,8 +84,8 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
             // (useful for retrieving any pre-authentication state)
             app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
         }
-    } catch (e) {
-        state.error = e;
+    } catch (e: unknown) {
+        state.error = 'Error: ' + e;
     } finally {
         // Initialize our internal authentication state
         state.authenticated = await client.isAuthenticated();
@@ -122,8 +122,8 @@ async function handleRedirectCallback (url?: string): Promise<void> {
         await client.handleRedirectCallback(url);
         state.user = await client.getUser();
         state.authenticated = true;
-    } catch (e) {
-        state.error = e;
+    } catch (e: unknown) {
+        state.error = 'Error: ' + e;
     } finally {
         state.loading = false;
     }
