@@ -34,7 +34,7 @@
     "@typescript-eslint/parser": "^4.4.0",
     "@vue/cli-plugin-eslint": "^5.0.0-beta.2",
     "@vue/eslint-config-standard": "^6.0.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/eslint-config-typescript": "^9.0.0",
     "@vue/test-utils": "^2.0.0-beta.14",
     "concat": "^1.0.3",
     "conventional-changelog-conventionalcommits": "^4.6.0",
