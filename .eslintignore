@@ -2,3 +2,4 @@
 /dist/**
 /coverage/**
 rollup.config.js
+/samples/**

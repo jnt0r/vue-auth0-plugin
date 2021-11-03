@@ -1,0 +1,29 @@
+{
+  "name": "simple-vue3-sample",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --https",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "plugin": "cd ../../ & npm build & npm pack",
+    "pinstall": "npm install ../../vue-auth0-plugin-0.0.0-semantically-released.tgz"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "dotenv": "^10.0.0",
+    "vue": "^3.0.0",
+    "vue-auth0-plugin": "file:../../vue-auth0-plugin-0.0.0-semantically-released.tgz",
+    "vue-router": "4.0.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
