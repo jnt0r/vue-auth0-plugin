@@ -133,7 +133,7 @@ function loginWithRedirect (options?: RedirectLoginOptions): Promise<void> {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken> {
+function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> {
     return client.getIdTokenClaims(options);
 }
 
