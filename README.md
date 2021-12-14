@@ -12,7 +12,7 @@ Simple Auth0 wrapper for Vue.js based on the [Auth0 Single Page App SDK](https:/
 
 ## Prerequisites
 
-You need a Auth0 tenant and a configured Auth0 application. For information about how to create these, take a look [here](https://auth0.com/docs/get-started)
+You need a Auth0 tenant and a configured Auth0 application. For information about how to create these, take a look at the [official documentation](https://auth0.com/docs/get-started).
 
 ## Installation
 
@@ -20,9 +20,13 @@ You need a Auth0 tenant and a configured Auth0 application. For information abou
 npm install --save vue-auth0-plugin
 ```
 
+## Samples
+
+To see some samples how to use the plugin, take a look into the [samples folder](/samples) in the project.
+
 ## Usage
 
-Register the plugin in your main.ts file. For a list of available options, take a look here: [https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html](https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html)
+Register the plugin in your main.ts file. For a list of available options, take a look here: [https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html](https://auth0.github.io/auth0-spa-js/interfaces/auth0clientoptions.html).
 
 ```js
 import { createApp } from 'vue';
