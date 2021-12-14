@@ -112,7 +112,7 @@ async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfig
     }
 
     state.user = await client.getUser();
-    state.authenticated = true;
+    state.authenticated = await client.isAuthenticated();
 }
 
 async function handleRedirectCallback (url?: string): Promise<void> {
@@ -121,7 +121,7 @@ async function handleRedirectCallback (url?: string): Promise<void> {
     try {
         await client.handleRedirectCallback(url);
         state.user = await client.getUser();
-        state.authenticated = true;
+        state.authenticated = await client.isAuthenticated();
     } catch (e: unknown) {
         state.error = 'Error: ' + e;
     } finally {
@@ -133,7 +133,7 @@ function loginWithRedirect (options?: RedirectLoginOptions): Promise<void> {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken> {
+function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> {
     return client.getIdTokenClaims(options);
 }
 
