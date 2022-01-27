@@ -42,10 +42,12 @@ app.use(VueAuth0Plugin, {
 app.mount('#app');
 ```
 
-Then Auth0 can be injected as ´auth´ like the example below. For more information about provide/inject, take a look here [https://v3.vuejs.org/guide/component-provide-inject.html](https://v3.vuejs.org/guide/component-provide-inject.html). For example:
+Then Auth0 can be injected using the provided `injectAuth` function. For more information about provide/inject, take a look here [https://v3.vuejs.org/guide/component-provide-inject.html](https://v3.vuejs.org/guide/component-provide-inject.html). For example:
 
 ```js
-const auth = inject('auth') as AuthenticationProperties;
+import { injectAuth } from 'vue-auth0-plugin'
+
+const auth = injectAuth();
 
 const authenticated = auth.authenticated;
 const loading = auth.loading;
@@ -56,7 +58,7 @@ if (!auth.authenticated) {
 }
 ```
 
-Or in a component
+Auth0 can also be injected as ´auth´ using the Options API like the example below
 
 ```html
 <template>
@@ -68,12 +70,12 @@ Or in a component
 </template>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { injectionToken } from 'vue-auth0-plugin'
 @Options({
   inject: ['auth'],
 })
 export default class MyComponent extends Vue {}
 </script>
-
 ```
 
 If you want to use the state of authentication when you do not have access to the Vue instance, you can use the exported AuthenticationState.
