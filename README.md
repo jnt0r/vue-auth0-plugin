@@ -72,7 +72,7 @@ Auth0 can also be injected as ´auth´ using the Options API like the example be
 import { Options, Vue } from 'vue-class-component';
 import { injectionToken } from 'vue-auth0-plugin'
 @Options({
-  inject: ['auth'],
+  inject: [injectionToken],
 })
 export default class MyComponent extends Vue {}
 </script>
