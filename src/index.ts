@@ -4,7 +4,7 @@ import Plugin from './plugin';
 import AuthenticationGuard from './AuthenticationGuard';
 import AuthProperty from './AuthProperty';
 
-const vueAuthInjectionKey = 'auth'
+const vueAuthInjectionKey = 'auth';
 
 export default {
     install (app: App, options: Auth0ClientOptions): void {
@@ -16,8 +16,14 @@ export default {
     },
 };
 
-const injectAuth = () => inject<AuthProperty>(vueAuthInjectionKey)
+const injectAuth = () => inject<AuthProperty>(vueAuthInjectionKey);
 
 const AuthenticationState = Plugin.state;
 const AuthenticationProperties = Plugin.properties;
-export { AuthenticationGuard, AuthenticationState, AuthenticationProperties, injectAuth, vueAuthInjectionKey as injectionKey };
+export {
+    AuthenticationGuard,
+    AuthenticationState,
+    AuthenticationProperties,
+    injectAuth,
+    vueAuthInjectionKey as injectionKey,
+};
