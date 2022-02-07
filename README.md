@@ -58,7 +58,7 @@ if (!auth.authenticated) {
 }
 ```
 
-Auth0 can also be injected as ´auth´ using the Options API like the example below
+Auth0 can also be injected using the Options API like the example below
 
 ```html
 <template>
@@ -96,12 +96,14 @@ import { AuthenticationProperties as auth0 } from 'vue-auth0-plugin';
 const token = auth0.getTokenSilently();
 ```
 
-## AuthenticationGuard
+## AuthenticationGuards
 
-The plugin implements a Vue Router NavigationGuard to secure routes with Auth0. The example below shows how to use this AuthenticationGuard.
+The plugin implements two Vue Router NavigationGuards to secure routes with Auth0. The `AuthenticationGuard` has an integrated redirect to the Auth0 login when the user is not authenticated. The `AuthenticationGuardWithoutLoginRedirect` does not have this redirect. The example below shows how to use this AuthenticationGuards.
 
 ```js
 import { AuthenticationGuard } from 'vue-auth0-plugin';
+// or alternative
+import { AuthenticationGuardWithoutLoginRedirect } from 'vue-auth0-plugin';
 
 let routes = [
     ...
@@ -109,7 +111,7 @@ let routes = [
         path: '/private',
         name: 'PrivateRoute',
         component: () => import(/* webpackChunkName: "private" */ '../views/Private.vue'),
-        beforeEnter: AuthenticationGuard,
+        beforeEnter: AuthenticationGuard, // or AuthenticationGuardWithoutLoginRedirect
     },
 ];
 
