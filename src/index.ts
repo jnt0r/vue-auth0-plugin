@@ -1,8 +1,9 @@
 import { App, inject } from 'vue';
 import createAuth0Client, { Auth0ClientOptions } from '@auth0/auth0-spa-js';
 import Plugin from './plugin';
-import AuthenticationGuard from './AuthenticationGuard';
 import AuthProperty from './AuthProperty';
+import AuthenticationGuardWithoutLoginRedirect from './guards/AuthenticationGuardWithoutLoginRedirect';
+import AuthenticationGuardWithLoginRedirect from './guards/AuthenticationGuardWithLoginRedirect';
 
 const vueAuthInjectionKey = 'auth';
 
@@ -21,7 +22,8 @@ const injectAuth = () => inject<AuthProperty>(vueAuthInjectionKey);
 const AuthenticationState = Plugin.state;
 const AuthenticationProperties = Plugin.properties;
 export {
-    AuthenticationGuard,
+    AuthenticationGuardWithLoginRedirect as AuthenticationGuard,
+    AuthenticationGuardWithoutLoginRedirect,
     AuthenticationState,
     AuthenticationProperties,
     injectAuth,
