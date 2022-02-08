@@ -13,6 +13,7 @@ import {
 
 export default interface AuthProperty {
     authenticated: boolean;
+    getAuthenticatedAsPromise: () => Promise<boolean>;
     loading: boolean;
     user?: User;
     client?: Auth0Client,

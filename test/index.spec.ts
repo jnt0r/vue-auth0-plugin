@@ -32,6 +32,7 @@ describe('VueAuth0Plugin', () => {
 
         expect(wrapper.vm.$auth).toMatchObject({
             authenticated: expect.any(Boolean),
+            getAuthenticatedAsPromise: expect.any(Function),
             loading: expect.any(Boolean),
             user: undefined,
             client: undefined,
@@ -59,6 +60,7 @@ describe('VueAuth0Plugin', () => {
         // @ts-ignore
         expect(wrapper.vm.auth).toMatchObject({
             authenticated: expect.any(Boolean),
+            getAuthenticatedAsPromise: expect.any(Function),
             loading: expect.any(Boolean),
             user: undefined,
             client: undefined,
@@ -74,9 +76,11 @@ describe('VueAuth0Plugin', () => {
 
     it('should export AuthenticationState', () => {
         expect(AuthenticationState).toEqual(Plugin.state);
+
         Plugin.state.loading = true;
         Plugin.state.authenticated = true;
         Plugin.state.user = { name: 'TestUser' };
+
         expect(AuthenticationState).toEqual(Plugin.state);
     });
 });
