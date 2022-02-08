@@ -1,4 +1,4 @@
-import { App, reactive } from 'vue';
+import { App, reactive, watch } from 'vue';
 import {
     Auth0Client,
     GetIdTokenClaimsOptions,
@@ -16,12 +16,21 @@ import AuthProperty from './AuthProperty';
 const state = reactive({
     loading: true,
     authenticated: false,
+    getAuthenticatedAsPromise: () => new Promise<boolean>((resolve) => {
+        const unwatch = watch(() => state.loading, async () => {
+            if (!state.loading) {
+                unwatch();
+                resolve(state.authenticated);
+            }
+        });
+    }),
     user: undefined,
     popupOpen: false,
     error: undefined,
 } as {
     loading: boolean,
     authenticated: boolean,
+    getAuthenticatedAsPromise: () => Promise<boolean>,
     user?: User,
     popupOpen: boolean,
     error?: string
@@ -29,6 +38,7 @@ const state = reactive({
 
 const properties = reactive({
     authenticated: false,
+    getAuthenticatedAsPromise: state.getAuthenticatedAsPromise,
     loading: true,
     user: undefined,
     client: undefined,
