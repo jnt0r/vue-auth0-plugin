@@ -86,7 +86,14 @@ import { AuthenticationState } from 'vue-auth0-plugin';
 if (!AuthenticationState.authenticated) {
     // do something here
 }
+
+// or asynchronous using Promise
+if (!await AuthenticationState.getAuthenticatedAsPromise) {
+    // do something here
+}
 ```
+
+> **INFO**: The synchronous `AuthenticationState.authenticated` can give wrong result if used before initialization of the plugin. Then the plugin is still loading the state of authentication and returns the default value _false_. In this case you should use the asynchronous `AuthenticationState.getAuthenticatedAsPromise` that resolves when the loading has finished and then returns the state of authentication.
 
 If you want to use the properties provided by Auth0 when you do not have access to the Vue instance, you can use the exported AuthenticationProperties.
 
