@@ -45,4 +45,4 @@ jobs:
 
       - name: Preview Changelog
         if: ${{ github.event_name == 'pull_request' }}
-        run: npx semantic-release-github-pr -d --debug
+        run: npx semantic-release-github-pr --debug
