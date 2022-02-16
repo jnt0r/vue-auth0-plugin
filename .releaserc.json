@@ -38,6 +38,10 @@
               "section": "Reverts"
             },
             {
+              "type": "deps",
+              "section": "Dependencies"
+            },
+            {
               "type": "docs",
               "section": "Documentation",
               "hidden": false
