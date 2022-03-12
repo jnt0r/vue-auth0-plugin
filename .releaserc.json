@@ -38,7 +38,7 @@
               "section": "Reverts"
             },
             {
-              "type": "deps",
+              "tag": "deps",
               "section": "Dependencies",
               "release": "patch",
               "hidden": false
