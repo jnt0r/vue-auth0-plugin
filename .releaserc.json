@@ -39,7 +39,9 @@
             },
             {
               "type": "deps",
-              "section": "Dependencies"
+              "section": "Dependencies",
+              "release": "patch",
+              "hidden": false
             },
             {
               "type": "docs",
