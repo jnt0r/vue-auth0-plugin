@@ -1,7 +1,7 @@
 import { RouteLocationNormalized } from 'vue-router';
 import { instance, mock, when } from 'ts-mockito';
 import authPlugin from '../src/plugin';
-import AuthenticationGuard from '../src/guards/AuthenticationGuardWithLoginRedirect';
+import AuthenticationGuard from '../src/AuthenticationGuard';
 
 describe('AuthenticationGuard', () => {
     it('should call loginWithRedirect when not authenticated', async () => {

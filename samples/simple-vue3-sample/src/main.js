@@ -10,4 +10,4 @@ app.use(VueAuth0Plugin, {
     client_id: process.env.VUE_APP_AUTH0_CLIENT_ID,
     redirect_uri: 'https://192.168.178.106:8080',
 });
-app.mount('#app');
+app.mount('#app')

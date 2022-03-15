@@ -1,20 +1,17 @@
 import { RouteLocationNormalized } from 'vue-router';
-import Plugin from '../plugin';
+import Plugin from './plugin';
 import { watch } from 'vue';
 
 export default async (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    autoLogin: boolean,
 ): Promise<boolean> => {
     // define verify method for later use
     const verify = async () => {
         if (Plugin.state.authenticated) {
             return true;
         }
-        if (autoLogin) {
-            await Plugin.properties.loginWithRedirect({ appState: { targetUrl: to.fullPath } });
-        }
+        await Plugin.properties.loginWithRedirect({ appState: { targetUrl: to.fullPath } });
         return false;
     };
 
