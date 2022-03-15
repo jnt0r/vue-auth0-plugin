@@ -3,7 +3,11 @@
   "debug": false,
   "ci": true,
   "branches": [
-    "master"
+    "master",
+    {
+      "name": "beta",
+      "prerelease": true
+    }
   ],
   "plugins": [
     "@semantic-release/commit-analyzer",
@@ -32,6 +36,12 @@
             {
               "type": "revert",
               "section": "Reverts"
+            },
+            {
+              "tag": "deps",
+              "section": "Dependencies",
+              "release": "patch",
+              "hidden": false
             },
             {
               "type": "docs",
