@@ -2,7 +2,6 @@ import { deepEqual, instance, mock, verify, when } from 'ts-mockito';
 import createAuth0Client, { Auth0Client, User } from '@auth0/auth0-spa-js';
 import Plugin from '../src/plugin';
 import { createApp } from 'vue';
-import { AuthenticationState } from '../src';
 
 /* eslint-disable */
 /** Workaround for ts-mockito Bug **/
@@ -186,31 +185,11 @@ describe('methods should be delegated', () => {
 });
 
 describe('properties should be reactive', () => {
-    it('authenticated should be reactive ', () => {
+    it('isAuthenticated should be reactive ', () => {
         Plugin.state.authenticated = false;
         expect(Plugin.properties.authenticated).toBeFalsy();
 
         Plugin.state.authenticated = true;
         expect(Plugin.properties.authenticated).toBeTruthy();
-    });
-});
-
-describe('getAuthenticatedAsPromise', () => {
-    it('should resolve to false when not authenticated', async function () {
-        Plugin.state.loading = true;
-        Plugin.state.authenticated = false;
-        const authenticatedAsPromise = AuthenticationState.getAuthenticatedAsPromise();
-        Plugin.state.loading = false;
-        await expect(authenticatedAsPromise)
-            .resolves.toBeFalsy();
-    });
-
-    it('should resolve to true when authenticated', async function () {
-        Plugin.state.loading = true;
-        Plugin.state.authenticated = true;
-        const authenticatedAsPromise = AuthenticationState.getAuthenticatedAsPromise();
-        Plugin.state.loading = false;
-        await expect(authenticatedAsPromise)
-            .resolves.toBeTruthy();
     });
 });
