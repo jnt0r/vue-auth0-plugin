@@ -111,19 +111,76 @@ describe('initialize', () => {
 
     test('should handle redirect and navigate using router', (done) => {
         const clientInstance = instance(client);
-        const appState = {};
         setQueryValue('?code=code123&state=state456');
-        when(client.handleRedirectCallback()).thenResolve({ appState });
+        when(client.handleRedirectCallback()).thenResolve({ appState: {} });
 
         // mock vue-router
         const routerPush = jest.fn();
         app.config.globalProperties.$router = {};
         app.config.globalProperties.$router.push = routerPush;
+        app.config.globalProperties.$router.query = {
+            someOtherProperty: 'ShouldStayInState',
+            code: 'SomeCode',
+            state: 'SomeState',
+            error: 'SomeError',
+            error_description: 'Some Error Description',
+        };
 
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(routerPush).toHaveBeenCalledWith('/');
+            expect(routerPush).toHaveBeenCalledWith('/', { someOtherProperty: 'ShouldStayInState' });
+            done();
+        });
+    });
+
+    test('should handle redirect and navigate using router and targetUrl', (done) => {
+        const clientInstance = instance(client);
+        setQueryValue('?code=code123&state=state456');
+        when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+
+        // mock vue-router
+        const routerPush = jest.fn();
+        app.config.globalProperties.$router = {};
+        app.config.globalProperties.$router.push = routerPush;
+        app.config.globalProperties.$router.query = {
+            someOtherProperty: 'ShouldStayInState',
+            code: 'SomeCode',
+            state: 'SomeState',
+            error: 'SomeError',
+            error_description: 'Some Error Description',
+        };
+
+        Plugin.initialize(app, clientInstance).then(() => {
+            verify(client.handleRedirectCallback()).called();
+
+            expect(routerPush).toHaveBeenCalledWith('/testUrl', { someOtherProperty: 'ShouldStayInState' });
+            done();
+        });
+    });
+
+    test('should handle redirect and navigate without router', (done) => {
+        const clientInstance = instance(client);
+        setQueryValue('?code=code123&state=state456');
+        when(client.handleRedirectCallback()).thenResolve({ appState: {} });
+
+        Plugin.initialize(app, clientInstance).then(() => {
+            verify(client.handleRedirectCallback()).called();
+
+            expect(window.location.href).toEqual('/');
+            done();
+        });
+    });
+
+    test('should handle redirect and navigate without router and targetUrl', (done) => {
+        const clientInstance = instance(client);
+        setQueryValue('?code=code123&state=state456');
+        when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+
+        Plugin.initialize(app, clientInstance).then(() => {
+            verify(client.handleRedirectCallback()).called();
+
+            expect(window.location.href).toEqual('/testUrl');
             done();
         });
     });
@@ -134,18 +191,6 @@ describe('initialize', () => {
         return Plugin.initialize(app, client).then(() => {
             expect(Plugin.properties.client).toBeInstanceOf(Auth0Client);
             expect(Plugin.properties.client).toEqual(client);
-        });
-    });
-
-    it('should remove code and state properties from history state', async () => {
-        window.history.pushState(
-            { someOtherProperty: 'ShouldStayInState', code: 'SomeCode', state: 'SomeState' }, '', '');
-
-        expect(window.history.state).toEqual(
-            { someOtherProperty: 'ShouldStayInState', code: 'SomeCode', state: 'SomeState' });
-
-        return Plugin.initialize(app, instance(client)).then(() => {
-            expect(window.history.state).toEqual({ someOtherProperty: 'ShouldStayInState' });
         });
     });
 });
