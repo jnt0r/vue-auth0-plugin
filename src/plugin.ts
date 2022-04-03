@@ -105,9 +105,9 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
                 delete query.code;
                 delete query.error;
                 delete query.error_description;
-                app.config.globalProperties.$router.push(targetUrl, query);
+                app.config.globalProperties.$router.push({ path: targetUrl, replace: true }, query);
             } else {
-                window.location.href = targetUrl;
+                window.location.replace(targetUrl);
             }
         }
     }
