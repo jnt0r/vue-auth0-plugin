@@ -87,9 +87,9 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
     // set client property to created Auth0Client instance
     properties.client = client;
 
-    try {
-        // If the user is returning to the app after authentication
-        if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
+    // If the user is returning to the app after authentication
+    if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
+        try {
             // handle the redirect and retrieve tokens
             const { appState } = await client.handleRedirectCallback();
 
@@ -100,15 +100,15 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
             // Notify subscribers that the redirect callback has happened, passing the appState
             // (useful for retrieving any pre-authentication state)
             app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
+        } catch (e: unknown) {
+            state.error = e;
         }
-    } catch (e: unknown) {
-        state.error = e;
-    } finally {
-        // Initialize our internal authentication state
-        state.authenticated = await client.isAuthenticated();
-        state.user = await client.getUser();
-        state.loading = false;
     }
+
+    // Initialize our internal authentication state
+    state.authenticated = await client.isAuthenticated();
+    state.user = await client.getUser();
+    state.loading = false;
 }
 
 export default {
@@ -120,6 +120,7 @@ export default {
 async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfigOptions): Promise<void> {
     state.popupOpen = true;
     state.loading = true;
+    state.error = undefined;
 
     try {
         await client.loginWithPopup(options, config);
