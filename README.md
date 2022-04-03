@@ -55,6 +55,11 @@ const user = auth.user;
 
 if (!auth.authenticated) {
     auth.loginWithRedirect();
+    
+    // If errors occurre during login, they are provided in auth.error property
+    if (auth.error != undefined) {
+        // Do something with the error
+    }
 }
 ```
 
