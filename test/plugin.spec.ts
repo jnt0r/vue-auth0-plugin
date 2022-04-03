@@ -3,6 +3,7 @@ import createAuth0Client, { Auth0Client, User } from '@auth0/auth0-spa-js';
 import Plugin from '../src/plugin';
 import { createApp } from 'vue';
 import { AuthenticationProperties, AuthenticationState } from '../src';
+import resetModules = jest.resetModules;
 
 /* eslint-disable */
 /** Workaround for ts-mockito Bug **/
@@ -45,10 +46,14 @@ describe('initialize', () => {
     /* eslint-enable */
 
     afterEach(() => {
-        setQueryValue('');
+        resetModules();
         resetCalls(client);
         reset(client);
+
+        setQueryValue('');
         Plugin.state.error = undefined;
+        window.location.replace = () => {};
+        app.config.globalProperties.$router = undefined;
     });
 
     const client: Auth0Client = mock<Auth0Client>();
@@ -129,7 +134,9 @@ describe('initialize', () => {
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(routerPush).toHaveBeenCalledWith('/', { someOtherProperty: 'ShouldStayInState' });
+            expect(routerPush).toHaveBeenCalledWith(
+                { path: '/', replace: true },
+                { someOtherProperty: 'ShouldStayInState' });
             done();
         });
     });
@@ -154,7 +161,9 @@ describe('initialize', () => {
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(routerPush).toHaveBeenCalledWith('/testUrl', { someOtherProperty: 'ShouldStayInState' });
+            expect(routerPush).toHaveBeenCalledWith(
+                { path: '/testUrl', replace: true },
+                { someOtherProperty: 'ShouldStayInState' });
             done();
         });
     });
@@ -163,11 +172,13 @@ describe('initialize', () => {
         const clientInstance = instance(client);
         setQueryValue('?code=code123&state=state456');
         when(client.handleRedirectCallback()).thenResolve({ appState: {} });
+        const replaceFn = jest.fn();
+        window.location.replace = replaceFn;
 
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(window.location.href).toEqual('/');
+            expect(replaceFn).toHaveBeenCalledWith('/');
             done();
         });
     });
@@ -176,11 +187,13 @@ describe('initialize', () => {
         const clientInstance = instance(client);
         setQueryValue('?code=code123&state=state456');
         when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+        const replaceFn = jest.fn();
+        window.location.replace = replaceFn;
 
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(window.location.href).toEqual('/testUrl');
+            expect(replaceFn).toHaveBeenCalledWith('/testUrl');
             done();
         });
     });
