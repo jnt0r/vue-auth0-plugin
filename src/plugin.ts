@@ -33,7 +33,7 @@ const state = reactive({
     getAuthenticatedAsPromise: () => Promise<boolean>,
     user?: User,
     popupOpen: boolean,
-    error?: string
+    error?: unknown
 });
 
 const properties = reactive({
@@ -42,6 +42,7 @@ const properties = reactive({
     loading: true,
     user: undefined,
     client: undefined,
+    error: undefined,
     getIdTokenClaims,
     getTokenSilently,
     getTokenWithPopup,
@@ -70,6 +71,12 @@ Object.defineProperties(properties, {
         },
         enumerable: false,
     },
+    error: {
+        get () {
+            return state.error;
+        },
+        enumerable: false,
+    },
 });
 
 let client: Auth0Client;
@@ -82,7 +89,7 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
 
     try {
         // If the user is returning to the app after authentication
-        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+        if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
             // handle the redirect and retrieve tokens
             const { appState } = await client.handleRedirectCallback();
 
@@ -95,7 +102,7 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
             app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
         }
     } catch (e: unknown) {
-        state.error = 'Error: ' + e;
+        state.error = e;
     } finally {
         // Initialize our internal authentication state
         state.authenticated = await client.isAuthenticated();
@@ -112,17 +119,18 @@ export default {
 
 async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfigOptions): Promise<void> {
     state.popupOpen = true;
+    state.loading = true;
 
     try {
         await client.loginWithPopup(options, config);
-    } catch (e) {
-        console.error(e);
+    } catch (e: unknown) {
+        state.error = e;
     } finally {
         state.popupOpen = false;
+        state.loading = false;
+        state.user = await client.getUser();
+        state.authenticated = await client.isAuthenticated();
     }
-
-    state.user = await client.getUser();
-    state.authenticated = await client.isAuthenticated();
 }
 
 async function handleRedirectCallback (url?: string): Promise<void> {
@@ -133,7 +141,7 @@ async function handleRedirectCallback (url?: string): Promise<void> {
         state.user = await client.getUser();
         state.authenticated = await client.isAuthenticated();
     } catch (e: unknown) {
-        state.error = 'Error: ' + e;
+        state.error = e;
     } finally {
         state.loading = false;
     }

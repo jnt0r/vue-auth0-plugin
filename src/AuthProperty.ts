@@ -17,6 +17,7 @@ export default interface AuthProperty {
     loading: boolean;
     user?: User;
     client?: Auth0Client,
+    error: unknown,
     getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => Promise<IdToken>,
     // Any type defined by auth0-spa-js.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
