@@ -3,19 +3,25 @@ name: Release-Notes-Preview
 on:
   pull_request:
     branches: [ master, beta ]
-  issue_comment:
-    types: [ edited ]
 
 jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          git fetch --prune --unshallow --tags
-      - uses: snyk/release-notes-preview@v1.6.1
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
-          releaseBranch: beta
-        env:
-          GITHUB_PR_USERNAME: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: Generate release notes
+        id: release-notes-preview
+        uses: guilhermetod/semantic-release-notes-preview@v1.0.0
+      - name: Comment release notes preview
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+          Thank you for you contribution. Below is a preview of the release notes if your PR gets merged.
+
+          ---
+
+          ${{ steps.release-notes-preview.outputs.releaseNotes }}
