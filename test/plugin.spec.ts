@@ -1,8 +1,8 @@
-import { deepEqual, instance, mock, verify, when } from 'ts-mockito';
+import { deepEqual, instance, mock, reset, resetCalls, verify, when } from 'ts-mockito';
 import createAuth0Client, { Auth0Client, User } from '@auth0/auth0-spa-js';
 import Plugin from '../src/plugin';
 import { createApp } from 'vue';
-import { AuthenticationState } from '../src';
+import { AuthenticationProperties, AuthenticationState } from '../src';
 
 /* eslint-disable */
 /** Workaround for ts-mockito Bug **/
@@ -15,7 +15,19 @@ export const resolvableInstance = <T extends {}>(mock: T) => new Proxy<T>(instan
         return (target as any)[name];
     },
 });
+
 /* eslint-enable */
+
+function setQueryValue (search: string) {
+    const location = {
+        ...window.location,
+        search: search,
+    };
+    Object.defineProperty(window, 'location', {
+        writable: true,
+        value: location,
+    });
+}
 
 describe('initialize', () => {
     /* eslint-disable */
@@ -32,6 +44,13 @@ describe('initialize', () => {
     global.crypto.subtle = {}; // this gets around the 'auth0-spa-js must run on a secure origin' error
     /* eslint-enable */
 
+    afterEach(() => {
+        setQueryValue('');
+        resetCalls(client);
+        reset(client);
+        Plugin.state.error = undefined;
+    });
+
     const client: Auth0Client = mock<Auth0Client>();
     const app = createApp({ render: () => null });
 
@@ -39,10 +58,32 @@ describe('initialize', () => {
         when(client.getUser()).thenResolve(undefined);
         when(client.isAuthenticated()).thenResolve(false);
 
+        expect(Plugin.properties.error).toBeUndefined();
         Plugin.initialize(app, instance(client)).then(() => {
+            verify(client.handleRedirectCallback()).never();
+
             expect(Plugin.properties.authenticated).toBeFalsy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toBeUndefined();
+            expect(Plugin.properties.error).toBeUndefined();
+            done();
+        });
+    });
+
+    test('should set state when error occurred', (done) => {
+        setQueryValue('?code=some_code&state=state_1234');
+
+        when(client.handleRedirectCallback()).thenThrow(new Error('An error occurred!'));
+        when(client.getUser()).thenResolve(undefined);
+
+        expect(Plugin.properties.error).toBeUndefined();
+        Plugin.initialize(app, instance(client)).then(() => {
+            verify(client.handleRedirectCallback()).called();
+
+            expect(Plugin.properties.authenticated).toBeFalsy();
+            expect(Plugin.properties.loading).toBeFalsy();
+            expect(Plugin.properties.user).toBeUndefined();
+            expect(Plugin.properties.error).toEqual(new Error('An error occurred!'));
             done();
         });
     });
@@ -56,10 +97,14 @@ describe('initialize', () => {
         when(client.getUser()).thenResolve(user);
         when(client.isAuthenticated()).thenResolve(true);
 
+        expect(Plugin.properties.error).toBeUndefined();
         Plugin.initialize(app, clientInstance).then(() => {
+            verify(client.handleRedirectCallback()).never();
+
             expect(Plugin.properties.authenticated).toBeTruthy();
             expect(Plugin.properties.loading).toBeFalsy();
             expect(Plugin.properties.user).toEqual(user);
+            expect(Plugin.properties.error).toBeUndefined();
             done();
         });
     });
@@ -67,16 +112,8 @@ describe('initialize', () => {
     test('should handle redirect and navigate using router', (done) => {
         const clientInstance = instance(client);
         const appState = {};
-
+        setQueryValue('?code=code123&state=state456');
         when(client.handleRedirectCallback()).thenResolve({ appState });
-
-        global.window = Object.create(window);
-        const search = '?code=code123&state=state456';
-        Object.defineProperty(window, 'location', {
-            value: {
-                search: search,
-            },
-        });
 
         // mock vue-router
         const routerPush = jest.fn();
@@ -100,7 +137,7 @@ describe('initialize', () => {
         });
     });
 
-    it('should remove code and state properties from historystate', async () => {
+    it('should remove code and state properties from history state', async () => {
         window.history.pushState(
             { someOtherProperty: 'ShouldStayInState', code: 'SomeCode', state: 'SomeState' }, '', '');
 
@@ -212,5 +249,46 @@ describe('getAuthenticatedAsPromise', () => {
         Plugin.state.loading = false;
         await expect(authenticatedAsPromise)
             .resolves.toBeTruthy();
+    });
+});
+
+describe('LoginWithPopup', () => {
+    const client: Auth0Client = mock<Auth0Client>();
+    const clientInstance = instance(client);
+    const app = createApp({ render: () => null });
+
+    beforeAll(async () => {
+        await Plugin.initialize(app, clientInstance);
+    });
+
+    it('should set error when authentication failed', (done) => {
+        when(client.loginWithPopup(undefined, undefined)).thenThrow(new Error('This is an error'));
+        when(client.getUser()).thenResolve(undefined);
+
+        AuthenticationProperties.loginWithPopup().then(() => {
+            expect(Plugin.state.authenticated).toBeFalsy();
+            expect(Plugin.state.user).toBeUndefined();
+            expect(Plugin.state.loading).toBeFalsy();
+            expect(Plugin.state.error).toEqual(new Error('This is an error'));
+            done();
+        });
+    });
+
+    it('should set loading and popup open to true', (done) => {
+        const promise = new Promise<void>(function (resolve) {
+            expect(Plugin.state.loading).toBeTruthy();
+            expect(Plugin.state.popupOpen).toBeTruthy();
+
+            resolve();
+        });
+
+        when(client.loginWithPopup(undefined, undefined)).thenReturn(promise);
+        when(client.getUser()).thenResolve(undefined);
+
+        AuthenticationProperties.loginWithPopup().then(() => {
+            expect(Plugin.state.loading).toBeFalsy();
+            expect(Plugin.state.popupOpen).toBeFalsy();
+            done();
+        });
     });
 });

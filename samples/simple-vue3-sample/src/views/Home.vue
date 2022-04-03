@@ -8,6 +8,7 @@
       <span>{{ auth.authenticated ? 'Authenticated' : 'Not authenticated'}}</span>
       <span>{{ auth.loading ? 'Loading' : 'Not loading'}}</span>
       <span>User: {{ auth.user?.name || 'NO_USER' }}</span>
+      <span>Error: {{ auth.error || 'NO_ERROR' }}</span>
     </div>
   </div>
 </template>
