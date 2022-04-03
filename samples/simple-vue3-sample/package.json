@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --https",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "plugin": "cd ../../ & npm build & npm pack",
+    "plugin": "cd ../../ & npm run build & npm pack",
     "pinstall": "npm install ../../vue-auth0-plugin-0.0.0-semantically-released.tgz"
   },
   "dependencies": {
