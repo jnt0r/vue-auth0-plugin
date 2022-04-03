@@ -89,19 +89,26 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
 
     // If the user is returning to the app after authentication
     if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
+        let appState;
         try {
             // handle the redirect and retrieve tokens
-            const { appState } = await client.handleRedirectCallback();
-
-            window.history.replaceState(
-                { ...window.history.state, code: undefined, state: undefined },
-                document.title, window.location.pathname);
-
-            // Notify subscribers that the redirect callback has happened, passing the appState
-            // (useful for retrieving any pre-authentication state)
-            app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
+            appState = (await client.handleRedirectCallback()).appState;
         } catch (e: unknown) {
             state.error = e;
+        } finally {
+            const targetUrl = appState && appState.targetUrl ? appState.targetUrl : '/';
+
+            // Remove query params if vue-router is used
+            if (app.config.globalProperties.$router) {
+                const query = Object.assign({}, app.config.globalProperties.$router.query);
+                delete query.state;
+                delete query.code;
+                delete query.error;
+                delete query.error_description;
+                app.config.globalProperties.$router.push(targetUrl, query);
+            } else {
+                window.location.href = targetUrl;
+            }
         }
     }
 
