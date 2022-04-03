@@ -274,17 +274,18 @@ describe('LoginWithPopup', () => {
         });
     });
 
-    it('should set loading and popup open to true', (done) => {
+    it('should reset properties before login', (done) => {
         const promise = new Promise<void>(function (resolve) {
             expect(Plugin.state.loading).toBeTruthy();
             expect(Plugin.state.popupOpen).toBeTruthy();
+            expect(Plugin.state.error).toBeUndefined();
 
             resolve();
         });
 
         when(client.loginWithPopup(undefined, undefined)).thenReturn(promise);
-        when(client.getUser()).thenResolve(undefined);
 
+        Plugin.state.error = 'This is an error!';
         AuthenticationProperties.loginWithPopup().then(() => {
             expect(Plugin.state.loading).toBeFalsy();
             expect(Plugin.state.popupOpen).toBeFalsy();
