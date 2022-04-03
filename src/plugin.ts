@@ -141,6 +141,9 @@ async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfig
     }
 }
 
+/**
+ * @deprecated This method should not be called directly. RedirectCallback is handled by the plugin automatically.
+ */
 async function handleRedirectCallback (url?: string): Promise<void> {
     state.loading = true;
 
