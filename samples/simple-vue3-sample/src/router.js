@@ -1,9 +1,9 @@
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import Home from "@/views/Home";
 import { AuthenticationGuard } from "vue-auth0-plugin";
 
 export let router = createRouter({
-    history: createWebHashHistory(process.env.BASE_URL),
+    history: createWebHistory(),
     routes: [
         {
             path: '/',
