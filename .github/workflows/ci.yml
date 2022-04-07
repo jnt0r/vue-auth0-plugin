@@ -34,6 +34,7 @@ jobs:
       - name: Comment release notes preview
         if: ${{ github.event_name == 'pull_request' }}
         uses: peter-evans/create-or-update-comment@v1
+        continue-on-error: true
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.release-notes-preview.outputs.releaseNotes }}
