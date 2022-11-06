@@ -22,7 +22,7 @@ export const resolvableInstance = <T extends {}>(mock: T) => new Proxy<T>(instan
 function setQueryValue (search: string) {
     const location = {
         ...window.location,
-        search: search,
+        search,
     };
     Object.defineProperty(window, 'location', {
         writable: true,
@@ -267,14 +267,6 @@ describe('methods should be delegated', () => {
             deepEqual({ cacheMode: 'on' }),
             deepEqual({ timeoutInSeconds: 5000 })),
         ).called();
-    });
-
-    it('handleRedirectCallback', () => {
-        Plugin.properties.handleRedirectCallback();
-        verify(client.handleRedirectCallback(deepEqual(undefined))).called();
-
-        Plugin.properties.handleRedirectCallback('/test');
-        verify(client.handleRedirectCallback('/test')).called();
     });
 });
 

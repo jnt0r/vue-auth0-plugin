@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils';
 import '../src/vue.d';
 import Plugin from '../src/plugin';
 import { Auth0Client } from '@auth0/auth0-spa-js';
+import AuthProperty from '../src/AuthProperty';
 
 describe('VueAuth0Plugin', () => {
     /* eslint-disable */
@@ -45,7 +46,7 @@ describe('VueAuth0Plugin', () => {
 
         });
 
-        expect(wrapper.vm.$auth).toMatchObject({
+        expect(wrapper.vm.$auth).toMatchObject<AuthProperty>({
             authenticated: expect.any(Boolean),
             getAuthenticatedAsPromise: expect.any(Function),
             loading: expect.any(Boolean),
@@ -55,7 +56,6 @@ describe('VueAuth0Plugin', () => {
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),
-            handleRedirectCallback: expect.any(Function),
             loginWithRedirect: expect.any(Function),
             loginWithPopup: expect.any(Function),
             logout: expect.any(Function),
@@ -74,7 +74,7 @@ describe('VueAuth0Plugin', () => {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        expect(wrapper.vm.auth).toMatchObject({
+        expect(wrapper.vm.auth).toMatchObject<AuthProperty>({
             authenticated: expect.any(Boolean),
             getAuthenticatedAsPromise: expect.any(Function),
             loading: expect.any(Boolean),
@@ -84,7 +84,6 @@ describe('VueAuth0Plugin', () => {
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),
-            handleRedirectCallback: expect.any(Function),
             loginWithRedirect: expect.any(Function),
             loginWithPopup: expect.any(Function),
             logout: expect.any(Function),
