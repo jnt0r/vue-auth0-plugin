@@ -12,7 +12,7 @@
     "test": "jest",
     "test:ci": "jest --coverage",
     "build:sample": "npm pack && cd samples/simple-vue3-sample && npm run pinstall && npm run build",
-    "test:sample": "npm run sample:build"
+    "test:sample": "npm run build:sample"
   },
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
