@@ -14,7 +14,8 @@
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits",
       "releaseRules": [
-        {"type": "deps", "release": "patch"}
+        {"type": "deps", "release": "patch"},
+        {"type": "deprecation", "release": "minor"}
       ]
     }],
     [

@@ -51,6 +51,7 @@ describe('VueAuth0Plugin', () => {
             loading: expect.any(Boolean),
             user: undefined,
             client: expect.any(Auth0Client),
+            error: undefined,
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),
@@ -79,6 +80,7 @@ describe('VueAuth0Plugin', () => {
             loading: expect.any(Boolean),
             user: undefined,
             client: expect.any(Auth0Client),
+            error: undefined,
             getIdTokenClaims: expect.any(Function),
             getTokenSilently: expect.any(Function),
             getTokenWithPopup: expect.any(Function),
@@ -95,6 +97,7 @@ describe('VueAuth0Plugin', () => {
         Plugin.state.loading = true;
         Plugin.state.authenticated = true;
         Plugin.state.user = { name: 'TestUser' };
+        Plugin.state.error = 'This is an error';
 
         expect(AuthenticationState).toEqual(Plugin.state);
     });
