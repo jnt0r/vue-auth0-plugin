@@ -2,7 +2,7 @@
   <div class="home">
     <button v-on:click="auth.loginWithPopup()" :disabled="auth.authenticated">Login with PopUp</button>
     <button v-on:click="auth.loginWithRedirect()" :disabled="auth.authenticated">Login with Redirect</button>
-    <button v-on:click="auth.logout()" :disabled="!auth.authenticated">Logout</button>
+    <button v-on:click="auth.logout({logoutParams: {returnTo: 'https://192.168.238.206:8080'}})" :disabled="!auth.authenticated">Logout</button>
 
     <div class="status">
       <span>{{ auth.authenticated ? 'Authenticated' : 'Not authenticated'}}</span>
