@@ -4,7 +4,7 @@
     <img :src="auth.user.picture" alt="Profile picture"/>
     <br />
 
-    <button v-on:click="auth.logout()">Logout</button>
+    <button v-on:click="auth.logout({logoutParams: {returnTo: 'https://192.168.238.206:8080'}})">Logout</button>
   </div>
 </template>
 

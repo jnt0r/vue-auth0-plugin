@@ -1,6 +1,5 @@
 import {
     Auth0Client,
-    GetIdTokenClaimsOptions,
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
     IdToken,
@@ -17,12 +16,10 @@ export default interface AuthProperty {
     loading: boolean;
     user?: User;
     client?: Auth0Client,
-    getIdTokenClaims: (options?: GetIdTokenClaimsOptions) => Promise<IdToken>,
-    // Any type defined by auth0-spa-js.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<any>,
-    getTokenWithPopup: (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) => Promise<string>,
-    handleRedirectCallback: (url?: string) => Promise<void>,
+    error: unknown,
+    getIdTokenClaims: () => Promise<IdToken | undefined>,
+    getTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>,
+    getTokenWithPopup: (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) => Promise<string | undefined>,
     loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>,
     loginWithPopup: (options?: PopupLoginOptions, config?: PopupConfigOptions) => Promise<void>,
     logout: (options?: LogoutOptions) => void,

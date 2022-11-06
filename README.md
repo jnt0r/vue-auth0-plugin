@@ -12,7 +12,7 @@ Simple Auth0 wrapper for Vue.js based on the [Auth0 Single Page App SDK](https:/
 
 ## Prerequisites
 
-You need a Auth0 tenant and a configured Auth0 application. For information about how to create these, take a look at the [official documentation](https://auth0.com/docs/get-started).
+You need an Auth0 tenant and a configured Auth0 application. For information about how to create these, take a look at the [official documentation](https://auth0.com/docs/get-started).
 
 ## Installation
 
@@ -36,7 +36,7 @@ import App from './App.vue';
 const app = createApp(App);
 app.use(VueAuth0Plugin, {
   domain: 'YOUR_AUTH0_DOMAIN',
-  client_id: 'YOUR_CLIENT_ID',
+  clientId: 'YOUR_CLIENT_ID',
   // ... other optional options ...
 });
 app.mount('#app');
@@ -55,6 +55,11 @@ const user = auth.user;
 
 if (!auth.authenticated) {
     auth.loginWithRedirect();
+    
+    // If errors occurre during login, they are provided in auth.error property
+    if (auth.error != undefined) {
+        // Do something with the error
+    }
 }
 ```
 
@@ -129,7 +134,7 @@ const router = createRouter({
 ```
 
 ## Changelog
-Changelog can be seen at [Github Releases](https://github.com/jnt0r/vue-auth0-plugin/releases).
+Changelog can be seen at [GitHub Releases](https://github.com/jnt0r/vue-auth0-plugin/releases).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

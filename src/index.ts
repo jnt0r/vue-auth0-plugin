@@ -1,5 +1,5 @@
 import { App, inject } from 'vue';
-import createAuth0Client, { Auth0ClientOptions } from '@auth0/auth0-spa-js';
+import { Auth0Client, Auth0ClientOptions } from '@auth0/auth0-spa-js';
 import Plugin from './plugin';
 import AuthProperty from './AuthProperty';
 import AuthenticationGuardWithoutLoginRedirect from './guards/AuthenticationGuardWithoutLoginRedirect';
@@ -9,11 +9,10 @@ const vueAuthInjectionKey = 'auth';
 
 export default {
     install (app: App, options: Auth0ClientOptions): void {
-        // global $auth property is deprecated
-        app.config.globalProperties.$auth = Plugin.properties;
         app.provide(vueAuthInjectionKey, Plugin.properties);
 
-        createAuth0Client(options).then((client) => Plugin.initialize(app, client));
+        const client = new Auth0Client(options);
+        Plugin.initialize(app, client);
     },
 };
 

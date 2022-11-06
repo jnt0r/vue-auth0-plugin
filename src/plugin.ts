@@ -1,7 +1,6 @@
 import { App, reactive, watch } from 'vue';
 import {
     Auth0Client,
-    GetIdTokenClaimsOptions,
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
     IdToken,
@@ -33,7 +32,7 @@ const state = reactive({
     getAuthenticatedAsPromise: () => Promise<boolean>,
     user?: User,
     popupOpen: boolean,
-    error?: string
+    error?: unknown
 });
 
 const properties = reactive({
@@ -42,10 +41,10 @@ const properties = reactive({
     loading: true,
     user: undefined,
     client: undefined,
+    error: undefined,
     getIdTokenClaims,
     getTokenSilently,
     getTokenWithPopup,
-    handleRedirectCallback,
     loginWithRedirect,
     loginWithPopup,
     logout,
@@ -70,6 +69,12 @@ Object.defineProperties(properties, {
         },
         enumerable: false,
     },
+    error: {
+        get () {
+            return state.error;
+        },
+        enumerable: false,
+    },
 });
 
 let client: Auth0Client;
@@ -80,28 +85,35 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
     // set client property to created Auth0Client instance
     properties.client = client;
 
-    try {
-        // If the user is returning to the app after authentication
-        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+    // If the user is returning to the app after authentication
+    if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
+        let appState;
+        try {
             // handle the redirect and retrieve tokens
-            const { appState } = await client.handleRedirectCallback();
+            appState = (await client.handleRedirectCallback()).appState;
+        } catch (e: unknown) {
+            state.error = e;
+        } finally {
+            const targetUrl = appState && appState.targetUrl ? appState.targetUrl : '/';
 
-            window.history.replaceState(
-                { ...window.history.state, code: undefined, state: undefined },
-                document.title, window.location.pathname);
-
-            // Notify subscribers that the redirect callback has happened, passing the appState
-            // (useful for retrieving any pre-authentication state)
-            app.config.globalProperties.$router.push(appState && appState.targetUrl ? appState.targetUrl : '/');
+            // Remove query params if vue-router is used
+            if (app.config.globalProperties.$router) {
+                const query = Object.assign({}, app.config.globalProperties.$router.query);
+                delete query.state;
+                delete query.code;
+                delete query.error;
+                delete query.error_description;
+                app.config.globalProperties.$router.push({ path: targetUrl, replace: true }, query);
+            } else {
+                window.location.replace(targetUrl);
+            }
         }
-    } catch (e: unknown) {
-        state.error = 'Error: ' + e;
-    } finally {
-        // Initialize our internal authentication state
-        state.authenticated = await client.isAuthenticated();
-        state.user = await client.getUser();
-        state.loading = false;
     }
+
+    // Initialize our internal authentication state
+    state.authenticated = await client.isAuthenticated();
+    state.user = await client.getUser();
+    state.loading = false;
 }
 
 export default {
@@ -112,30 +124,18 @@ export default {
 
 async function loginWithPopup (options?: PopupLoginOptions, config?: PopupConfigOptions): Promise<void> {
     state.popupOpen = true;
+    state.loading = true;
+    state.error = undefined;
 
     try {
         await client.loginWithPopup(options, config);
-    } catch (e) {
-        console.error(e);
+    } catch (e: unknown) {
+        state.error = e;
     } finally {
         state.popupOpen = false;
-    }
-
-    state.user = await client.getUser();
-    state.authenticated = await client.isAuthenticated();
-}
-
-async function handleRedirectCallback (url?: string): Promise<void> {
-    state.loading = true;
-
-    try {
-        await client.handleRedirectCallback(url);
+        state.loading = false;
         state.user = await client.getUser();
         state.authenticated = await client.isAuthenticated();
-    } catch (e: unknown) {
-        state.error = 'Error: ' + e;
-    } finally {
-        state.loading = false;
     }
 }
 
@@ -143,20 +143,19 @@ function loginWithRedirect (options?: RedirectLoginOptions): Promise<void> {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> {
-    return client.getIdTokenClaims(options);
+function getIdTokenClaims (): Promise<IdToken | undefined> {
+    return client.getIdTokenClaims();
 }
 
-// Type any defined by auth0-spa-js
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<any> {
+function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<string> {
     return client.getTokenSilently(options);
 }
 
-function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions): Promise<string> {
+function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions):
+    Promise<string | undefined> {
     return client.getTokenWithPopup(options, config);
 }
 
-function logout (options?: LogoutOptions): Promise<void> | void {
+function logout (options?: LogoutOptions): Promise<void> {
     return client.logout(options);
 }
