@@ -1,5 +1,5 @@
 import { deepEqual, instance, mock, verify, when } from 'ts-mockito';
-import createAuth0Client, { Auth0Client, User } from '@auth0/auth0-spa-js';
+import { Auth0Client, User } from '@auth0/auth0-spa-js';
 import Plugin from '../src/plugin';
 import { createApp } from 'vue';
 import { AuthenticationState } from '../src';
@@ -74,7 +74,7 @@ describe('initialize', () => {
         const search = '?code=code123&state=state456';
         Object.defineProperty(window, 'location', {
             value: {
-                search: search,
+                search,
             },
         });
 
@@ -92,7 +92,7 @@ describe('initialize', () => {
     });
 
     it('should expose initialised Auth0Client as client property', async () => {
-        const client = await createAuth0Client({ client_id: '', domain: '' });
+        const client = new Auth0Client({ clientId: '', domain: '' });
 
         return Plugin.initialize(app, client).then(() => {
             expect(Plugin.properties.client).toBeInstanceOf(Auth0Client);
@@ -126,33 +126,31 @@ describe('methods should be delegated', () => {
         Plugin.properties.logout();
         verify(client.logout(deepEqual(undefined))).called();
 
-        Plugin.properties.logout({ returnTo: 'someLocation' });
-        verify(client.logout(deepEqual({ returnTo: 'someLocation' }))).called();
+        Plugin.properties.logout({ clientId: '1234' });
+        verify(client.logout(deepEqual({ clientId: '1234' }))).called();
     });
 
     it('getIdTokenClaims', () => {
         Plugin.properties.getIdTokenClaims();
-        verify(client.getIdTokenClaims(deepEqual(undefined))).called();
-
-        Plugin.properties.getIdTokenClaims({ scope: 'someScope' });
-        verify(client.getIdTokenClaims(deepEqual({ scope: 'someScope' }))).called();
+        verify(client.getIdTokenClaims()).called();
     });
 
     it('loginWithRedirect', () => {
         Plugin.properties.loginWithRedirect();
         verify(client.loginWithRedirect(deepEqual(undefined))).called();
 
-        Plugin.properties.loginWithRedirect({ login_hint: 'Some login hint' });
-        verify(client.loginWithRedirect(deepEqual({ login_hint: 'Some login hint' }))).called();
+        Plugin.properties.loginWithRedirect({ fragment: 'some fragment' });
+        verify(client.loginWithRedirect(deepEqual({ fragment: 'some fragment' }))).called();
     });
 
     it('loginWithPopup', () => {
         Plugin.properties.loginWithPopup();
         verify(client.loginWithPopup(deepEqual(undefined), deepEqual(undefined))).called();
 
-        Plugin.properties.loginWithPopup({ login_hint: 'Some login hint' }, { timeoutInSeconds: 5000 });
+        Plugin.properties.loginWithPopup({ authorizationParams: { login_hint: 'some login hint' } },
+            { timeoutInSeconds: 5000 });
         verify(client.loginWithPopup(
-            deepEqual({ login_hint: 'Some login hint' }),
+            deepEqual({ authorizationParams: { login_hint: 'some login hint' } }),
             deepEqual({ timeoutInSeconds: 5000 })),
         ).called();
     });
@@ -161,17 +159,17 @@ describe('methods should be delegated', () => {
         Plugin.properties.getTokenSilently();
         verify(client.getTokenSilently(deepEqual(undefined))).called();
 
-        Plugin.properties.getTokenSilently({ redirect_uri: 'some redirect uri' });
-        verify(client.getTokenSilently(deepEqual({ redirect_uri: 'some redirect uri' }))).called();
+        Plugin.properties.getTokenSilently({ detailedResponse: false });
+        verify(client.getTokenSilently(deepEqual({ detailedResponse: false }))).called();
     });
 
     it('getTokenWithPopup', () => {
         Plugin.properties.getTokenWithPopup();
         verify(client.getTokenWithPopup(deepEqual(undefined), deepEqual(undefined))).called();
 
-        Plugin.properties.getTokenWithPopup({ login_hint: 'some login hint' }, { timeoutInSeconds: 5000 });
+        Plugin.properties.getTokenWithPopup({ cacheMode: 'on' }, { timeoutInSeconds: 5000 });
         verify(client.getTokenWithPopup(
-            deepEqual({ login_hint: 'some login hint' }),
+            deepEqual({ cacheMode: 'on' }),
             deepEqual({ timeoutInSeconds: 5000 })),
         ).called();
     });

@@ -1,7 +1,6 @@
 import { App, reactive, watch } from 'vue';
 import {
     Auth0Client,
-    GetIdTokenClaimsOptions,
     GetTokenSilentlyOptions,
     GetTokenWithPopupOptions,
     IdToken,
@@ -143,20 +142,19 @@ function loginWithRedirect (options?: RedirectLoginOptions): Promise<void> {
     return client.loginWithRedirect(options);
 }
 
-function getIdTokenClaims (options?: GetIdTokenClaimsOptions): Promise<IdToken | undefined> {
-    return client.getIdTokenClaims(options);
+function getIdTokenClaims (): Promise<IdToken | undefined> {
+    return client.getIdTokenClaims();
 }
 
-// Type any defined by auth0-spa-js
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<any> {
+function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<string> {
     return client.getTokenSilently(options);
 }
 
-function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions): Promise<string> {
+function getTokenWithPopup (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions):
+    Promise<string | undefined> {
     return client.getTokenWithPopup(options, config);
 }
 
-function logout (options?: LogoutOptions): Promise<void> | void {
+function logout (options?: LogoutOptions): Promise<void> {
     return client.logout(options);
 }
