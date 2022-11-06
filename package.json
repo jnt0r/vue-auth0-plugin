@@ -10,7 +10,9 @@
     "build:ts": "rollup -c rollup.config.js",
     "release": "np --tag=beta",
     "test": "jest",
-    "test:ci": "jest --coverage"
+    "test:ci": "jest --coverage",
+    "build:sample": "npm pack && cd samples/simple-vue3-sample && npm run pinstall && npm run build",
+    "test:sample": "npm run sample:build"
   },
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
