@@ -15,7 +15,8 @@
       "preset": "conventionalcommits",
       "releaseRules": [
         {"type": "deps", "release": "patch"},
-        {"type": "deprecation", "release": "minor"}
+        {"type": "deprecation", "release": "minor"},
+        {"type": "removal", "release": "minor"}
       ]
     }],
     [
@@ -31,6 +32,11 @@
             {
               "type": "feature",
               "section": "Features"
+            },
+            {
+              "type": "removal",
+              "section": "Removals",
+              "hidden": false
             },
             {
               "type": "fix",
