@@ -1,5 +1,5 @@
 import VueAuth0Plugin, { AuthenticationState } from '../src';
-import { createApp } from 'vue';
+import { createApp, Plugin as VuePlugin } from 'vue';
 import { mount } from '@vue/test-utils';
 import '../src/vue.d';
 import Plugin from '../src/plugin';
@@ -22,7 +22,7 @@ describe('VueAuth0Plugin', () => {
     /* eslint-enable */
 
     it('should be vue plugin', () => {
-        expect(VueAuth0Plugin).toMatchObject({
+        expect(VueAuth0Plugin).toMatchObject<VuePlugin>({
             install: expect.any(Function),
         });
     });
@@ -32,33 +32,6 @@ describe('VueAuth0Plugin', () => {
         app.use(VueAuth0Plugin, {
             domain: 'domain',
             clientId: 'clientID',
-        });
-    });
-
-    it('should add global property $auth', () => {
-        const wrapper = mount({ render: () => null }, {
-            global: {
-                plugins: [ [ VueAuth0Plugin, {
-                    domain: 'domain',
-                    clientId: 'clientID',
-                } ] ],
-            },
-
-        });
-
-        expect(wrapper.vm.$auth).toMatchObject<AuthProperty>({
-            authenticated: expect.any(Boolean),
-            getAuthenticatedAsPromise: expect.any(Function),
-            loading: expect.any(Boolean),
-            user: undefined,
-            client: expect.any(Auth0Client),
-            error: undefined,
-            getIdTokenClaims: expect.any(Function),
-            getTokenSilently: expect.any(Function),
-            getTokenWithPopup: expect.any(Function),
-            loginWithRedirect: expect.any(Function),
-            loginWithPopup: expect.any(Function),
-            logout: expect.any(Function),
         });
     });
 
@@ -72,8 +45,6 @@ describe('VueAuth0Plugin', () => {
             },
         });
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         expect(wrapper.vm.auth).toMatchObject<AuthProperty>({
             authenticated: expect.any(Boolean),
             getAuthenticatedAsPromise: expect.any(Function),

@@ -9,8 +9,6 @@ const vueAuthInjectionKey = 'auth';
 
 export default {
     install (app: App, options: Auth0ClientOptions): void {
-        // global $auth property is deprecated
-        app.config.globalProperties.$auth = Plugin.properties;
         app.provide(vueAuthInjectionKey, Plugin.properties);
 
         const client = new Auth0Client(options);
