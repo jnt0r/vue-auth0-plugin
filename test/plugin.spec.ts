@@ -5,20 +5,6 @@ import { createApp } from 'vue';
 import { AuthenticationProperties, AuthenticationState } from '../src';
 import resetModules = jest.resetModules;
 
-/* eslint-disable */
-/** Workaround for ts-mockito Bug **/
-export const resolvableInstance = <T extends {}>(mock: T) => new Proxy<T>(instance(mock), {
-    get(target, name: PropertyKey) {
-        if (['Symbol(Symbol.toPrimitive)', 'then', 'catch'].includes(name.toString())) {
-            return undefined;
-        }
-
-        return (target as any)[name];
-    },
-});
-
-/* eslint-enable */
-
 function setQueryValue (search: string) {
     const location = {
         ...window.location,
@@ -31,29 +17,30 @@ function setQueryValue (search: string) {
 }
 
 describe('initialize', () => {
-    /* eslint-disable */
-    const JSDOM = require('jsdom').JSDOM;
+    // auth0-spa-js must run in secure context. Accessing Crypto.subtle in a not secure context returns undefined.
     Object.defineProperty(global.self, 'crypto', {
         value: {
-            getRandomValues: (arr: string | any[]) => {
-                // @ts-ignore
-                return crypto.randomBytes(arr.length);
-            },
+            subtle: {},
         },
     });
-    // @ts-ignore
-    global.crypto.subtle = {}; // this gets around the 'auth0-spa-js must run on a secure origin' error
-    /* eslint-enable */
 
     afterEach(() => {
         resetModules();
         resetCalls(client);
         reset(client);
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        app.config.globalProperties.$route = undefined;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        app.config.globalProperties.$router = undefined;
+
         setQueryValue('');
         Plugin.state.error = undefined;
-        window.location.replace = () => {};
-        app.config.globalProperties.$router = undefined;
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.location.replace = () => {
+        };
     });
 
     const client: Auth0Client = mock<Auth0Client>();
@@ -121,9 +108,14 @@ describe('initialize', () => {
 
         // mock vue-router
         const routerPush = jest.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         app.config.globalProperties.$router = {};
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        app.config.globalProperties.$route = {};
         app.config.globalProperties.$router.push = routerPush;
-        app.config.globalProperties.$router.query = {
+        app.config.globalProperties.$route.query = {
             someOtherProperty: 'ShouldStayInState',
             code: 'SomeCode',
             state: 'SomeState',
@@ -135,8 +127,7 @@ describe('initialize', () => {
             verify(client.handleRedirectCallback()).called();
 
             expect(routerPush).toHaveBeenCalledWith(
-                { path: '/', replace: true },
-                { someOtherProperty: 'ShouldStayInState' });
+                { path: '/', replace: true, query: { someOtherProperty: 'ShouldStayInState' } });
             done();
         });
     });
@@ -148,9 +139,14 @@ describe('initialize', () => {
 
         // mock vue-router
         const routerPush = jest.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         app.config.globalProperties.$router = {};
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        app.config.globalProperties.$route = {};
         app.config.globalProperties.$router.push = routerPush;
-        app.config.globalProperties.$router.query = {
+        app.config.globalProperties.$route.query = {
             someOtherProperty: 'ShouldStayInState',
             code: 'SomeCode',
             state: 'SomeState',
@@ -162,8 +158,7 @@ describe('initialize', () => {
             verify(client.handleRedirectCallback()).called();
 
             expect(routerPush).toHaveBeenCalledWith(
-                { path: '/testUrl', replace: true },
-                { someOtherProperty: 'ShouldStayInState' });
+                { path: '/testUrl', replace: true, query: { someOtherProperty: 'ShouldStayInState' } });
             done();
         });
     });
