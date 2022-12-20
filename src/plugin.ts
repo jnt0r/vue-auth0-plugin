@@ -98,12 +98,12 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
 
             // Remove query params if vue-router is used
             if (app.config.globalProperties.$router) {
-                const query = Object.assign({}, app.config.globalProperties.$router.query);
+                const query = Object.assign({}, app.config.globalProperties.$route.query);
                 delete query.state;
                 delete query.code;
                 delete query.error;
                 delete query.error_description;
-                app.config.globalProperties.$router.push({ path: targetUrl, replace: true }, query);
+                app.config.globalProperties.$router.push({ path: targetUrl, replace: true, query });
             } else {
                 window.location.replace(targetUrl);
             }
