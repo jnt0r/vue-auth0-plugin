@@ -49,6 +49,9 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Samples
+        run: npm run test:sample
+
       - name: Upload Coverage report
         uses: codecov/codecov-action@v3
         with:

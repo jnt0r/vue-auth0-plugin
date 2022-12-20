@@ -10,7 +10,9 @@
     "build:ts": "rollup -c rollup.config.js",
     "release": "np --tag=beta",
     "test": "jest",
-    "test:ci": "jest --coverage"
+    "test:ci": "jest --coverage",
+    "build:sample": "npm pack && cd samples/simple-vue3-sample && npm run pinstall && npm run build",
+    "test:sample": "npm run build:sample"
   },
   "main": "dist/auth0-vue-plugin.cjs.js",
   "module": "dist/auth0-vue-plugin.esm.js",
@@ -47,7 +49,6 @@
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^8.0.1",
     "jest": "^27.0.4",
-    "node": "^19.3.0",
     "np": "^7.4.0",
     "rollup": "^2.39.0",
     "rollup-plugin-terser": "^7.0.2",
