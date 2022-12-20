@@ -18,12 +18,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Comment release notes preview
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         continue-on-error: true
         with:
           issue-number: ${{ github.event.number }}
@@ -50,7 +50,7 @@ jobs:
         run: npm run test:ci
 
       - name: Upload Coverage report
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           directory: ./coverage # optional
           flags: unittests # optional
