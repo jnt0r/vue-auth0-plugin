@@ -2,6 +2,7 @@ import { App, reactive, watch } from 'vue';
 import {
     Auth0Client,
     GetTokenSilentlyOptions,
+    GetTokenSilentlyVerboseResponse,
     GetTokenWithPopupOptions,
     IdToken,
     LogoutOptions,
@@ -147,7 +148,9 @@ function getIdTokenClaims (): Promise<IdToken | undefined> {
     return client.getIdTokenClaims();
 }
 
-function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<string> {
+function getTokenSilently(options: GetTokenSilentlyOptions & { detailedResponse: true }): Promise<GetTokenSilentlyVerboseResponse>
+function getTokenSilently(options?: GetTokenSilentlyOptions): Promise<string>
+function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<undefined | string | GetTokenSilentlyVerboseResponse> {
     return client.getTokenSilently(options);
 }
 
