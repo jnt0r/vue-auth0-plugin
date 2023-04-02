@@ -1,6 +1,7 @@
 import {
     Auth0Client,
     GetTokenSilentlyOptions,
+    GetTokenSilentlyVerboseResponse,
     GetTokenWithPopupOptions,
     IdToken,
     LogoutOptions,
@@ -18,7 +19,7 @@ export default interface AuthProperty {
     client?: Auth0Client,
     error: unknown,
     getIdTokenClaims: () => Promise<IdToken | undefined>,
-    getTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>,
+    getTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<undefined | string | GetTokenSilentlyVerboseResponse>,
     getTokenWithPopup: (options?: GetTokenWithPopupOptions, config?: PopupConfigOptions) => Promise<string | undefined>,
     loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>,
     loginWithPopup: (options?: PopupLoginOptions, config?: PopupConfigOptions) => Promise<void>,
