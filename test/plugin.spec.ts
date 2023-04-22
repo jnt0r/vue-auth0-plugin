@@ -126,8 +126,7 @@ describe('initialize', () => {
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(routerPush).toHaveBeenCalledWith(
-                { path: '/', replace: true, query: { someOtherProperty: 'ShouldStayInState' } });
+            expect(routerPush).toHaveBeenCalledWith('/');
             done();
         });
     });
@@ -135,7 +134,8 @@ describe('initialize', () => {
     test('should handle redirect and navigate using router and targetUrl', (done) => {
         const clientInstance = instance(client);
         setQueryValue('?code=code123&state=state456');
-        when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+        when(client.handleRedirectCallback())
+            .thenResolve({ appState: { targetUrl: '/testUrl?someOtherProperty=ShouldStayInState' } });
 
         // mock vue-router
         const routerPush = jest.fn();
@@ -147,7 +147,6 @@ describe('initialize', () => {
         app.config.globalProperties.$route = {};
         app.config.globalProperties.$router.push = routerPush;
         app.config.globalProperties.$route.query = {
-            someOtherProperty: 'ShouldStayInState',
             code: 'SomeCode',
             state: 'SomeState',
             error: 'SomeError',
@@ -157,8 +156,7 @@ describe('initialize', () => {
         Plugin.initialize(app, clientInstance).then(() => {
             verify(client.handleRedirectCallback()).called();
 
-            expect(routerPush).toHaveBeenCalledWith(
-                { path: '/testUrl', replace: true, query: { someOtherProperty: 'ShouldStayInState' } });
+            expect(routerPush).toHaveBeenCalledWith('/testUrl?someOtherProperty=ShouldStayInState');
             done();
         });
     });

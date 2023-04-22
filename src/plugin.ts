@@ -97,14 +97,8 @@ async function initialize (app: App, authClient: Auth0Client): Promise<void> {
         } finally {
             const targetUrl = appState && appState.targetUrl ? appState.targetUrl : '/';
 
-            // Remove query params if vue-router is used
             if (app.config.globalProperties.$router) {
-                const query = Object.assign({}, app.config.globalProperties.$route.query);
-                delete query.state;
-                delete query.code;
-                delete query.error;
-                delete query.error_description;
-                app.config.globalProperties.$router.push({ path: targetUrl, replace: true, query });
+                app.config.globalProperties.$router.push(targetUrl);
             } else {
                 window.location.replace(targetUrl);
             }
@@ -148,8 +142,8 @@ function getIdTokenClaims (): Promise<IdToken | undefined> {
     return client.getIdTokenClaims();
 }
 
-function getTokenSilently(options: GetTokenSilentlyOptions & { detailedResponse: true }): Promise<GetTokenSilentlyVerboseResponse>
-function getTokenSilently(options?: GetTokenSilentlyOptions): Promise<string>
+function getTokenSilently(options: GetTokenSilentlyOptions & { detailedResponse: true }): Promise<GetTokenSilentlyVerboseResponse>;
+function getTokenSilently(options?: GetTokenSilentlyOptions): Promise<string>;
 function getTokenSilently (options?: GetTokenSilentlyOptions): Promise<undefined | string | GetTokenSilentlyVerboseResponse> {
     return client.getTokenSilently(options);
 }
