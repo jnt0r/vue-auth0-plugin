@@ -12,7 +12,7 @@ export default {
         app.provide(vueAuthInjectionKey, Plugin.properties);
 
         const client = new Auth0Client(options);
-        Plugin.initialize(app, client);
+        Plugin.initialize(app, client, options.authorizationParams?.redirect_uri);
     },
 };
 
