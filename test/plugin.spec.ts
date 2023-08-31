@@ -191,6 +191,37 @@ describe('initialize', () => {
         });
     });
 
+    test('should not redirect if redirectUri is different than current url', (done) => {
+        const clientInstance = instance(client);
+        setQueryValue('?code=code123&state=state456');
+        when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+        const replaceFn = jest.fn();
+        window.location.replace = replaceFn;
+
+        Plugin.initialize(app, clientInstance, 'http://localhost:1234/some/random/path').then(() => {
+            verify(client.handleRedirectCallback()).never();
+
+            expect(replaceFn).not.toHaveBeenCalled();
+            done();
+        });
+    });
+
+    test('should redirect if redirectUri matches current url', (done) => {
+        const clientInstance = instance(client);
+        setQueryValue('?code=code123&state=state456');
+        when(client.handleRedirectCallback()).thenResolve({ appState: { targetUrl: '/testUrl' } });
+        const replaceFn = jest.fn();
+        window.location.replace = replaceFn;
+        window.location.href = 'http://localhost:1234/some/random/path?code=code123&state=state456';
+
+        Plugin.initialize(app, clientInstance, 'http://localhost:1234/some/random/path').then(() => {
+            verify(client.handleRedirectCallback()).called();
+
+            expect(replaceFn).toHaveBeenCalledWith('/testUrl');
+            done();
+        });
+    });
+
     it('should expose initialised Auth0Client as client property', async () => {
         const client = new Auth0Client({ clientId: '', domain: '' });
 

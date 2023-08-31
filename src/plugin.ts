@@ -80,14 +80,15 @@ Object.defineProperties(properties, {
 
 let client: Auth0Client;
 
-async function initialize (app: App, authClient: Auth0Client): Promise<void> {
+async function initialize (app: App, authClient: Auth0Client, redirectUri?: string): Promise<void> {
     client = authClient;
 
     // set client property to created Auth0Client instance
     properties.client = client;
 
     // If the user is returning to the app after authentication
-    if (window.location.search.includes('state=') || window.location.search.includes('code=')) {
+    if ((redirectUri === undefined || window.location.href.split('?')[0] === redirectUri) &&
+        (window.location.search.includes('state=') || window.location.search.includes('code='))) {
         let appState;
         try {
             // handle the redirect and retrieve tokens
